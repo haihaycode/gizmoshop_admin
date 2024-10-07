@@ -8,8 +8,13 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "axios": "^1.7.7",
     "core-js": "^3.8.3",
-    "vue": "^3.2.13"
+    "notyf": "^3.10.0",
+    "qs": "^6.13.0",
+    "vue": "^3.2.13",
+    "vue-router": "^4.0.13",
+    "vuex": "^4.0.2"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",
@@ -42,5 +47,17 @@
     "last 2 versions",
     "not dead",
     "not ie 11"
-  ]
+  ],
+  "description": "``` page này dành cho quản trị viên (admin) \tQuản trị viên -\tQuản lý tài khoản +\tQuản trị viên có thể cập nhật thông tin của tài khoản quản trị viên. +\tQuản trị viên có thể đăng nhập vào trang quản lý cửa hàng bằng tài khoản của mình. -\tQuản lý nhân viên +\tQuản trị viên có thể thêm, sửa, xóa, thay đổi trạng thái của các thành phần nhân viên có trên cửa hang, cập nhật sản phẩm. -\tQuản lý kho +\tQuản trị viên có thể quản lý kho điều này có nghĩa là quản trị viên có thể thống kê mọi số lượng của sản phẩm đổ về kho. -\tThống kê +\tQuản trị viên có thể thống mọi thứ trong cửa hàng bao gồm: doanh thu của các nhà cung cấp, số lượng sản phẩm đã được bán ra, số lượng nhà cung cấp, số hoa hồng thu được.",
+  "main": "babel.config.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/haihaycode/gizmoshop_admin.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/haihaycode/gizmoshop_admin/issues"
+  },
+  "homepage": "https://github.com/haihaycode/gizmoshop_admin#readme"
 }
