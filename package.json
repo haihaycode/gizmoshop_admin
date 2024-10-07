@@ -13,6 +13,7 @@
     "notyf": "^3.10.0",
     "qs": "^6.13.0",
     "vue": "^3.2.13",
+    "vue-router": "^4.0.13",
     "vuex": "^4.0.2"
   },
   "devDependencies": {
