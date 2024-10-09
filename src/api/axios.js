@@ -4,16 +4,16 @@ import axios from 'axios';
 import Qs from 'qs';
 import { MAX_TIME_OUT, HOST, SUCCESS_CODE } from '@/api/config';
 import store from '@/store';
-import notificationService from '@/services/notificationService'; // Để hiển thị thông báo lỗi nếu cần
+import notificationService from '@/services/notificationService';
 
 // Tạo instance Axios với cấu hình cơ bản
 const Axios = axios.create({
-    baseURL: HOST, // URL cơ bản cho API
-    timeout: MAX_TIME_OUT, // Thời gian chờ tối đa
-    responseType: 'json', // Kiểu phản hồi
-    withCredentials: true, // Gửi cookie theo yêu cầu
+    baseURL: HOST,
+    timeout: MAX_TIME_OUT,
+    responseType: 'json',
+    withCredentials: false,
     headers: {
-        'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8' // Kiểu nội dung
+        'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
     }
 });
 
@@ -39,24 +39,23 @@ Axios.interceptors.request.use(
 // Thêm interceptor cho phản hồi
 Axios.interceptors.response.use(
     response => {
-        let data = response.data;
         store.dispatch('loading/setLoading', false); // Tắt loading sau khi nhận phản hồi
         if (response.status === SUCCESS_CODE) {
-            return data; // Trả về dữ liệu nếu mã thành công
+            console.log("trang thai 200")
+            return response; // Trả về dữ liệu nếu mã thành công
         } else {
             // Nếu mã không thành công, hiển thị thông báo lỗi
-            notificationService.error(data.message || 'Có lỗi xảy ra!');
-            return Promise.reject(data);
+            notificationService.error(response.message || 'Có lỗi xảy ra!');
+            return Promise.reject(response);
         }
     },
     error => {
+
         store.dispatch('loading/setLoading', false); // Tắt loading khi có lỗi
         // Xử lý lỗi 401 - Unauthorized
         if (error.response && error.response.status === 401) {
             notificationService.error('Phiên làm việc đã hết hạn, vui lòng đăng nhập lại.'); // Thông báo cho người dùng
             store.dispatch('auth/logout'); // Đăng xuất người dùng
-
-
         }
         // Xử lý các lỗi khác
         if (error.response && error.response.data) {
