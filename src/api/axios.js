@@ -1,5 +1,5 @@
 import axios from 'axios';
-import Qs from 'qs';
+// import Qs from 'qs';
 import { MAX_TIME_OUT, HOST, SUCCESS_CODE } from '@/api/config';
 import store from '@/store';
 import notificationService from '@/services/notificationService';
@@ -10,15 +10,14 @@ const Axios = axios.create({
     timeout: MAX_TIME_OUT,
     responseType: 'json',
     withCredentials: false, // Đặt true để gửi cookie nếu có
-    headers: {
-        'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
-    }
+   
 });
 
 let isRefreshing = false;
 let failedQueue = [];
 
 const processQueue = (error, token = null) => {
+    console.log("line 22")
     failedQueue.forEach(prom => {
         if (error) {
             prom.reject(error);
@@ -32,10 +31,13 @@ const processQueue = (error, token = null) => {
 
 // Thêm interceptor cho yêu cầu
 Axios.interceptors.request.use(
+   
     config => {
         store.dispatch('loading/setLoading', true); // Bắt đầu hiển thị loading
         if (config.method === 'post') {
-            config.data = Qs.stringify(config.data); // Chuyển đổi dữ liệu post thành chuỗi
+           
+            // config.data = Qs.stringify(config.data); 
+            console.log(  config.data)// Chuyển đổi dữ liệu post thành chuỗi
         }
         const token = store.getters['auth/token']; // Lấy token từ store
         if (token) {
@@ -62,11 +64,13 @@ Axios.interceptors.response.use(
         }
     },
     error => {
+        console.log("lỗi line 65")
         const originalRequest = error.config;
         store.dispatch('loading/setLoading', false); // Tắt loading khi có lỗi
 
         // Xử lý lỗi 401 - Unauthorized và kiểm tra refresh token
         if (error.response && error.response.status === 401 && !originalRequest._retry) {
+            console.log("line 75")
             if (store.getters['auth/refreshToken']) {
                 if (isRefreshing) {
                     return new Promise(function (resolve, reject) {
@@ -108,6 +112,7 @@ Axios.interceptors.response.use(
 
         // Xử lý các lỗi khác
         if (error.response && error.response.data) {
+            console.log(error.response.data.message)
             notificationService.error(error.response.data.message || 'Có lỗi xảy ra!'); // Hiển thị thông báo lỗi
         }
 

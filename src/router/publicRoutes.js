@@ -15,7 +15,7 @@ const publicRoutes = [
                     description: " Mô tả "
                 },
                 components: {
-                    default: useComponent('test'),
+                    default: useComponent('login'),
                     // header: Header,
                     // footer: Footer
                 }
@@ -26,4 +26,4 @@ const publicRoutes = [
     },
 ];
 
-export default publicRoutes;
+export default publicRoutes;  
