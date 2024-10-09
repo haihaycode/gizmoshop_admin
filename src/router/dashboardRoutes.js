@@ -1,11 +1,11 @@
 const useComponent = component => () => import(`../view/${component}.vue`);
 import Header from '@/components/Header.vue';
 import Footer from '@/components/Footer.vue';
-import admin from '@/view/admin.vue';
+// import admin from '@/view/admin.vue';
 const dashboardRoutes = [
     {
         path: '/',
-        component: admin,
+        component: useComponent('admin'),
         children: [
 
             {
