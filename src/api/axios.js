@@ -1,5 +1,3 @@
-// api/axios.js
-
 import axios from 'axios';
 import Qs from 'qs';
 import { MAX_TIME_OUT, HOST, SUCCESS_CODE } from '@/api/config';
@@ -11,11 +9,26 @@ const Axios = axios.create({
     baseURL: HOST,
     timeout: MAX_TIME_OUT,
     responseType: 'json',
-    withCredentials: false,
+    withCredentials: false, // Đặt true để gửi cookie nếu có
     headers: {
         'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
     }
 });
+
+let isRefreshing = false;
+let failedQueue = [];
+
+const processQueue = (error, token = null) => {
+    failedQueue.forEach(prom => {
+        if (error) {
+            prom.reject(error);
+        } else {
+            prom.resolve(token);
+        }
+    });
+
+    failedQueue = [];
+};
 
 // Thêm interceptor cho yêu cầu
 Axios.interceptors.request.use(
@@ -49,13 +62,50 @@ Axios.interceptors.response.use(
         }
     },
     error => {
-
+        const originalRequest = error.config;
         store.dispatch('loading/setLoading', false); // Tắt loading khi có lỗi
-        // Xử lý lỗi 401 - Unauthorized
-        if (error.response && error.response.status === 401) {
-            notificationService.error('Phiên làm việc đã hết hạn, vui lòng đăng nhập lại.'); // Thông báo cho người dùng
-            store.dispatch('auth/logout'); // Đăng xuất người dùng
+
+        // Xử lý lỗi 401 - Unauthorized và kiểm tra refresh token
+        if (error.response && error.response.status === 401 && !originalRequest._retry) {
+            if (store.getters['auth/refreshToken']) {
+                if (isRefreshing) {
+                    return new Promise(function (resolve, reject) {
+                        failedQueue.push({ resolve, reject });
+                    }).then(token => {
+                        originalRequest.headers['Authorization'] = 'Bearer ' + token;
+                        return Axios(originalRequest);
+                    }).catch(err => {
+                        return Promise.reject(err);
+                    });
+                }
+
+                originalRequest._retry = true;
+                isRefreshing = true;
+
+                return new Promise(function (resolve, reject) {
+                    Axios.post('/api/public/refresh', { refreshToken: store.getters['auth/refreshToken'] })
+                        .then(({ data }) => {
+                            store.dispatch('auth/setToken', data.token);
+                            Axios.defaults.headers.common['Authorization'] = 'Bearer ' + data.token;
+                            processQueue(null, data.token);
+                            resolve(Axios(originalRequest));
+                        })
+                        .catch(err => {
+                            processQueue(err, null);
+                            store.dispatch('auth/logout');
+                            notificationService.error('Phiên làm việc đã hết hạn, vui lòng đăng nhập lại.');
+                            reject(err);
+                        })
+                        .finally(() => {
+                            isRefreshing = false;
+                        });
+                });
+            } else {
+                notificationService.error('Phiên làm việc đã hết hạn, vui lòng đăng nhập lại.'); // Thông báo cho người dùng
+                store.dispatch('auth/logout'); // Đăng xuất người dùng
+            }
         }
+
         // Xử lý các lỗi khác
         if (error.response && error.response.data) {
             notificationService.error(error.response.data.message || 'Có lỗi xảy ra!'); // Hiển thị thông báo lỗi
@@ -65,4 +115,4 @@ Axios.interceptors.response.use(
     }
 );
 
-export default Axios; // Xuất Axios instance
+export default Axios;
