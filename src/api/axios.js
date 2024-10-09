@@ -68,6 +68,12 @@ Axios.interceptors.response.use(
         const originalRequest = error.config;
         store.dispatch('loading/setLoading', false); // Tắt loading khi có lỗi
 
+        // Kiểm tra xem có phải lỗi do timeout không
+        if (error.code === 'ECONNABORTED' && error.message.includes('timeout')) {
+            notificationService.error('Yêu cầu đã quá thời gian chờ. Vui lòng thử lại.'); // Hiển thị thông báo lỗi timeout
+            return Promise.reject(error); // Từ chối lỗi timeout
+        }
+
         // Xử lý lỗi 401 - Unauthorized và kiểm tra refresh token
         if (error.response && error.response.status === 401 && !originalRequest._retry) {
             console.log("line 75")
