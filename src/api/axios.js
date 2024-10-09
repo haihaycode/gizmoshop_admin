@@ -41,7 +41,6 @@ Axios.interceptors.response.use(
     response => {
         store.dispatch('loading/setLoading', false); // Tắt loading sau khi nhận phản hồi
         if (response.status === SUCCESS_CODE) {
-            console.log("trang thai 200")
             return response; // Trả về dữ liệu nếu mã thành công
         } else {
             // Nếu mã không thành công, hiển thị thông báo lỗi
