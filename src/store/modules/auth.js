@@ -27,7 +27,7 @@ const actions = {
     },
     setRefreshToken({ commit }, refreshToken) {
         // Lưu refresh token vào cookie
-        Cookies.set('refreshToken', refreshToken, { expires: 7 });
+        Cookies.set('refreshToken', refreshToken, { expires: 30 });
         commit('SET_REFRESH_TOKEN', refreshToken);
     },
     logout({ commit }) {
