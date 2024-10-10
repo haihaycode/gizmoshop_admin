@@ -1,7 +1,7 @@
 const useComponent = component => () => import(`../view/${component}.vue`);
 import Header from '@/components/Header.vue';
 import Footer from '@/components/Footer.vue';
-// import admin from '@/view/admin.vue';
+
 const dashboardRoutes = [
     {
         path: '/',
@@ -15,7 +15,7 @@ const dashboardRoutes = [
                     description: " Mô tả "
                 },
                 components: {
-                    default: useComponent('test'),
+                    default: useComponent('dashboard'),
                     header: Header,
                     footer: Footer
                 }
