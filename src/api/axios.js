@@ -1,5 +1,4 @@
 import axios from 'axios';
-// import Qs from 'qs';
 import { MAX_TIME_OUT, HOST, SUCCESS_CODE } from '@/api/config';
 import store from '@/store';
 import notificationService from '@/services/notificationService';
@@ -10,7 +9,7 @@ const Axios = axios.create({
     timeout: MAX_TIME_OUT,
     responseType: 'json',
     withCredentials: false, // Đặt true để gửi cookie nếu có
-   
+
 });
 
 let isRefreshing = false;
@@ -31,13 +30,10 @@ const processQueue = (error, token = null) => {
 
 // Thêm interceptor cho yêu cầu
 Axios.interceptors.request.use(
-   
     config => {
         store.dispatch('loading/setLoading', true); // Bắt đầu hiển thị loading
         if (config.method === 'post') {
-           
-            // config.data = Qs.stringify(config.data); 
-            console.log(  config.data)// Chuyển đổi dữ liệu post thành chuỗi
+            console.log("request : post")// Chuyển đổi dữ liệu post thành chuỗi
         }
         const token = store.getters['auth/token']; // Lấy token từ store
         if (token) {
@@ -64,7 +60,7 @@ Axios.interceptors.response.use(
         }
     },
     error => {
-        console.log("lỗi line 65")
+        console.log("line 65")
         const originalRequest = error.config;
         store.dispatch('loading/setLoading', false); // Tắt loading khi có lỗi
 
