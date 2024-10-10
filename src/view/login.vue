@@ -32,7 +32,7 @@
     </div>
 
     <!-- Notification Modal -->
-    <NotificationModal :isOpen="isModalOpen" :title="'Thông báo'" :message="message" :type="'success'"
+    <NotificationModal :isOpen="isModalOpen" :title="'Thông báo'" :message="message" :type="messageType"
       @close="isModalOpen = false" />
   </div>
 </template>
@@ -42,7 +42,7 @@ import NotificationModal from '@/components/modal/NotificationModal.vue';
 import BUTTON from '@/components/buttons/button.vue';
 import { mapGetters, mapActions } from 'vuex';
 import { loginApi } from '@/api/auth/loginApi';
-
+import { handleAuthentication } from '@/services/authService'
 import { Form, Field } from 'vee-validate';
 import * as Yup from 'yup';
 
@@ -58,7 +58,8 @@ export default {
       email: '',
       password: '',
       isModalOpen: false,
-      message: ''
+      message: '',
+      messageType: '',
     };
   },
   computed: {
@@ -80,17 +81,15 @@ export default {
           password: values.password,
         };
         const response = await loginApi(loginData); //call api login
-        this.message = response.message;
+        const isAdmin = handleAuthentication(response.data.accessToken, response.data.refreshToken);
+        this.messageType = isAdmin ? 'success' : 'warning';
+        this.message = isAdmin ? response.message : 'Không đủ quyền';
         this.isModalOpen = true;
-
-        //save accessToken and token -> store auth
-        this.setToken(response.data.accessToken);
-        this.setRefreshToken(response.data.refreshToken);
-
-        setTimeout(() => {
-          this.$router.push('/');
-        }, 2000);
-
+        if (isAdmin) {
+          setTimeout(() => {
+            this.$router.push('/');
+          }, 1000);
+        }
       } catch (error) {
         console.error(error);
       }

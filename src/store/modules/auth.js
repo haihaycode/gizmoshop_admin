@@ -34,6 +34,7 @@ const actions = {
         // Xoá token và refreshToken từ cookie khi đăng xuất
         Cookies.remove('token');
         Cookies.remove('refreshToken');
+        Cookies.remove('user');
         commit('LOGOUT');
     },
 };
