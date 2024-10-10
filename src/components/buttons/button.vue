@@ -1,11 +1,7 @@
 <template>
-  <button
-    :class="buttonClasses"
-    :disabled="isDisabled"
-    
-  >
+  <button :class="buttonClasses" :disabled="isDisabled">
     <span v-if="isLoading" class="loader mr-2"></span>
-    <span >{{ isLoading ? 'Đang tải ' : text }}</span>
+    <span class="lg:text-sm">{{ isLoading ? 'Đang tải ' : text }}</span>
   </button>
 </template>
 
@@ -57,7 +53,12 @@ export default {
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 </style>

@@ -4,7 +4,7 @@ import { jwtDecode } from 'jwt-decode'; // Import jwt-decode để giải mã JW
 const state = {
     token: Cookies.get('token') || null, // Đọc token từ cookie nếu có
     refreshToken: Cookies.get('refreshToken') || null, // Đọc refreshToken từ cookie nếu có
-    user: null,
+    user: Cookies.get('user') ? JSON.parse(Cookies.get('user')) : null,
 };
 
 const getters = {
@@ -20,9 +20,9 @@ const actions = {
         // Lưu token vào cookie
         Cookies.set('token', token, { expires: 1 }); // expires: 1 là 1 ngày
         commit('SET_TOKEN', token);
-
         // Giải mã JWT để lấy thông tin user từ token
         const decoded = jwtDecode(token);
+        Cookies.set('user', JSON.stringify(decoded), { expires: 1 });
         commit('SET_USER', decoded); // Lưu toàn bộ dữ liệu đã giải mã từ token vào state
     },
     setRefreshToken({ commit }, refreshToken) {
