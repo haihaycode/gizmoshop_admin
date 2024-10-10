@@ -18,10 +18,10 @@
                             d="M6 18L18 6M6 6l12 12" />
                     </svg>
 
-                    <svg v-if="type === 'warning'" class="w-6 h-6 text-yellow-500" fill="none" stroke="currentColor"
-                        viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <svg v-if="type === 'warning'" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor" class="w-6 h-6 text-yellow-500">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M13 16h-1v-4h1m0-4h-1m-6 8a9 9 0 1118 0 9 9 0 01-18 0z" />
+                            d="M12 9v2m0 4h.01M10.93 2.3c.58-.94 1.76-.94 2.34 0l9.36 15.02c.58.94-.14 2.13-1.17 2.13H3.74c-1.03 0-1.75-1.19-1.17-2.13L10.93 2.3z" />
                     </svg>
 
                     <svg v-if="type === 'info'" class="w-6 h-6 text-blue-500" fill="none" stroke="currentColor"
@@ -29,7 +29,6 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M13 16h-1v-4h1m0-4h-1m-6 8a9 9 0 1118 0 9 9 0 01-18 0z" />
                     </svg>
-
                     <h3 class="text-lg font-bold">{{ title }}</h3>
                 </div>
                 <button @click="closeModal" class="text-gray-400 hover:text-gray-600">
