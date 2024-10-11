@@ -20,6 +20,26 @@ const router = createRouter({
     linkExactActiveClass: 'my-custom-exact-active-class',
 });
 
+router.beforeEach((to, from, next) => {
+    if (to.meta.title) {
+        document.title = to.meta.title + ' - ' + to.meta.description;
+    }
+    if (to.meta.description) {
+        const descriptionTag = document.querySelector('meta[name="description"]');
+        if (descriptionTag) {
+            descriptionTag.setAttribute('content', to.meta.description);
+        } else {
+            const newDescriptionTag = document.createElement('meta');
+            newDescriptionTag.setAttribute('name', 'description');
+            newDescriptionTag.setAttribute('content', to.meta.description);
+            document.head.appendChild(newDescriptionTag);
+        }
+    }
+
+    next();
+});
+
+
 
 
 router.beforeEach(async (to, from, next) => {
