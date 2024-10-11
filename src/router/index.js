@@ -8,6 +8,9 @@ export const routes = [
     ...dashboardRoutes
 ];
 
+
+
+
 const router = createRouter({
     history: !DEV ? createWebHashHistory() : createWebHistory(),
     routes,
