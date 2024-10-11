@@ -2,11 +2,11 @@
  <div>
    
    <!--sidenav -->
-   <div class="fixed left-0 top-0 w-64 h-full bg-[#404e68] p-4 z-50 sidebar-menu transition-transform hidden md:block">
-            <a href="#" class="flex items-center pb-4 border-b border-b-gray-800">
+   <div v-if="isLeftMenuOpen"  class="fixed left-0 top-0 w-64 h-full bg-[#404e68] p-4 z-50 sidebar-menu transition-transform custom-scrollbar  md:block overflow-y-auto ">
+            <a href="#" class="flex items-center pb-4 border-b border-b-white border-opacity-60">
                 <h2 class="font-bold text-2xl text-white">GIZMO - QUẢN TRỊ</h2>
             </a>
-            <ul class="mt-4">
+            <ul class="mt-4 ">
                 <span class="text-white font-bold">QUẢN LÝ CHUNG</span>
                 <li class="mb-1 group">
                     <a href="" class="flex font-semibold items-center py-2 px-4 text-white hover:bg-gray-100 hover:bg-opacity-5 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100">
@@ -59,7 +59,7 @@
                 <li class="mb-1 group">
                     <a href="" class="flex font-semibold items-center py-2 px-4 text-white hover:bg-gray-100 hover:bg-opacity-5 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100">
                         <i class='bx bx-bell mr-3 text-lg' ></i>                
-                        <span class="text-sm">ĐỊA CHỈ KHO</span>
+                        <span class="text-sm">Danh sách kho</span>
                         <span class=" md:block px-2 py-0.5 ml-auto text-xs font-medium tracking-wide text-red-600 bg-red-200 rounded-full">5</span>
                     </a>
                 </li>
@@ -99,17 +99,32 @@
                         <span class=" md:block px-2 py-0.5 ml-auto text-xs font-medium tracking-wide text-green-600 bg-green-200 rounded-full">2 New</span>
                     </a>
                 </li>
+                <span @click="logout" class="text-white font-bold cursor-pointer">
+                    <i class='bx bx-log-out'></i> &nbsp; Đăng Xuất</span>               
             </ul>
         </div>
-        <div class="fixed top-0 left-0 w-full h-full bg-black/50 z-40 hidden md:hidden lg:hidden sidebar-overlay"></div>
+        <div v-if="isLeftMenuOpen" @click="toggleLeftMenu" class="fixed top-0 left-0 w-full h-full bg-black/50 z-40  md:hidden sidebar-overlay"></div>
         <!-- end sidenav -->
  </div>
 </template>
 
 <script>
-
+import '@/assets/css/customScrollbar.css';
+import { mapGetters , mapActions } from 'vuex';
 export default {
   name: 'NavbarComponent',
+  computed: {
+    ...mapGetters('leftMenu', ['isLeftMenuOpen'])
+  },
+  methods: {
+    ...mapActions('leftMenu', ['toggleLeftMenu']),
+    ...mapActions('auth', ['logout']),
+    
+  
   
 }
+}
 </script>
+<style lang="css" scoped>
+
+</style>

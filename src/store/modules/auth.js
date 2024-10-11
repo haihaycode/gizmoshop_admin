@@ -1,5 +1,6 @@
 import Cookies from 'js-cookie';// Import js-cookie để thao tác với cookie
 import { jwtDecode } from 'jwt-decode'; // Import jwt-decode để giải mã JWT
+import router from '@/router'; // Đảm bảo bạn đã import router
 
 const state = {
     token: Cookies.get('token') || null, // Đọc token từ cookie nếu có
@@ -53,6 +54,8 @@ const mutations = {
         state.token = null;
         state.refreshToken = null;
         state.user = null;
+         // Chuyển hướng đến trang login
+      router.push({ name: 'login' }); // Giả sử tên của route login là 'Login'
     },
 };
 
