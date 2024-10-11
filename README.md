@@ -17,10 +17,11 @@ page này dành cho quản trị viên (admin)
 
 ## Project setup
 
-mã màu: bg-blue-700,  text-gray-700 
+mã màu: bg-blue-500, text-gray-700 
 *hover:
 *bgr:
 *text:
+*error: red-500
 
 ```
 npm install
