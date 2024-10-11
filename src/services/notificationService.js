@@ -2,6 +2,7 @@
 import { Notyf } from 'notyf';
 import 'notyf/notyf.min.css';  // Import CSS cho thông báo
 
+
 const notyf = new Notyf({
     duration: 3000, // Thời gian hiển thị thông báo (ms)
     position: {
@@ -22,7 +23,7 @@ const notyf = new Notyf({
             type: 'error',
             background: 'red',
             icon: {
-                className: 'fas fa-exclamation-circle',
+                className: 'fas fa-bug',
                 tagName: 'i',
                 text: ''
             }

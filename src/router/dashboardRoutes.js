@@ -12,8 +12,8 @@ const dashboardRoutes = [
             {
                 path: '',
                 meta: {
-                    title: "...",
-                    description: " Mô tả "
+                    title: "Quản trị viên ",
+                    description: "Gizmo"
                 },
                 components: {
                     default: useComponent('test'),

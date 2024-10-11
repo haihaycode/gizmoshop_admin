@@ -11,8 +11,8 @@ const publicRoutes = [
             {
                 path: '',
                 meta: {
-                    title: "Tên routes ",
-                    description: " Mô tả "
+                    title: "Quản trị viên",
+                    description: "Đăng nhập"
                 },
                 components: {
                     default: useComponent('login'),

@@ -1,7 +1,8 @@
 <template>
-   <div>
-    <div class="min-h-screen flex items-center justify-center bg-gray-100">
-      <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">        <h2 class="text-2xl font-bold text-center mb-6">Quản Trị Viên <span class="text-blue-500"> GizmoShop</span></h2>
+  <div class="">
+    <div class="min-h-screen flex items-center justify-center bg-gray-100 ">
+      <div class="bg-white p-8 rounded-lg md:shadow-md sm:shadow-none md:w-full max-w-md ">
+        <h2 class="text-2xl font-bold text-center mb-6">Quản Trị Viên <span class="text-blue-500">GizmoShop</span></h2>
 
         <Form @submit="handleLogin" :validation-schema="schema" v-slot="{ errors }">
           <div class="mb-4">
@@ -24,7 +25,7 @@
               :class="errors.password ? 'border-red-500' : ''" />
             <p class="lg:text-sm text-red-500">{{ errors.password }}</p>
           </div>
-          <div class="flex items-center justify-between">
+          <div class="flex items-center justify-end">
             <BUTTON :isLoading="isLoading" color="bg-gray-500" disabledColor="bg-gray-300" text="Đăng nhập"></BUTTON>
           </div>
         </Form>

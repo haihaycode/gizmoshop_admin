@@ -20,3 +20,14 @@ export const handleAuthentication = (accessToken, refreshToken) => {
         return false;
     }
 };
+
+
+export const verifyAdmin = () => {
+    const token = store.getters['auth/token'];
+    if (token) {
+        const decoded = jwtDecode(token);
+        const roles = decoded.a || [];
+        return roles.includes('ROLE_ADMIN');
+    }
+    return false;
+};
