@@ -72,7 +72,7 @@ export default {
         },
         closeText: {
             type: String,
-            default: 'Close',
+            default: 'Đóng',
         },
     },
     emits: ['close'],

@@ -25,7 +25,7 @@
               :class="errors.password ? 'border-red-500' : ''" />
             <p class="lg:text-sm text-red-500">{{ errors.password }}</p>
           </div>
-          <div class="flex items-center justify-between">
+          <div class="flex items-center justify-end">
             <BUTTON :isLoading="isLoading" color="bg-gray-500" disabledColor="bg-gray-300" text="Đăng nhập"></BUTTON>
           </div>
         </Form>
