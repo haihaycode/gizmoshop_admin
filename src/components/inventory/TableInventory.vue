@@ -36,7 +36,7 @@
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.commune }}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.longitude }}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.latitude }}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.active }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><toggleButton :is-toggled="item.active" @update:isToggled="updateStatusInventory(item.id)"></toggleButton></td>
                 </tr>
             </template>
 
@@ -65,17 +65,18 @@
 </template>
 
 <script>
-import { listInventory } from '@/api/inventoryApi';
+import { changeActiveById, listInventory } from '@/api/inventoryApi';
 import TableComponent from '../table/TableComponent.vue';
 import updateInventory from './updateInventory.vue';
 import Pagination from '../pagination/Pagination.vue';
-
+import toggleButton from '../buttons/toggleButton.vue'; 
 export default {
     name: 'TableInventoryComponent',
     components: {
         TableComponent,
         updateInventory,
-        Pagination
+        Pagination,
+        toggleButton
     },
     data() {
         return {
@@ -130,6 +131,15 @@ export default {
             this.limit = limitPanigation;
             this.page = 0;
             this.loadInventory();
+        },
+       async updateStatusInventory(id){
+       try {
+       await changeActiveById(id);
+       this.loadInventory();
+       } catch (error) {
+        console.log(error)
+       }
+       
         },
 
 

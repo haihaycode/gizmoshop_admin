@@ -192,9 +192,10 @@ export default {
                 this.message = res.message;
                 this.messageType = 'success';
                 this.NotificationModalIsOpen = true;
+                this.$emit('create-success');
 
             } catch (error) {
-                this.message = error.message;
+            this.message = error.message;
                 this.messageType = 'error';
                 this.NotificationModalIsOpen = true;
             }

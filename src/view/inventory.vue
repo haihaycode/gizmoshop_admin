@@ -11,12 +11,11 @@
             </button>
         </div>
 
-        <AddNewInventory :isOpen="AddNewInventoryIsModalOpen" @close="triggerModalAddNewInventory"></AddNewInventory>
-
+        <AddNewInventory :isOpen="AddNewInventoryIsModalOpen" @close="triggerModalAddNewInventory"  @create-success="loadInventory" ></AddNewInventory>
 
 
         <!-- list -->
-        <TableInventory></TableInventory>
+        <TableInventory ref="tableInventory"></TableInventory>
     </div>
 </template>
 
@@ -39,7 +38,10 @@ export default {
     methods: {
         triggerModalAddNewInventory() {
             this.AddNewInventoryIsModalOpen = !this.AddNewInventoryIsModalOpen;
-        }
+        },
+        async loadInventory() {
+        await this.$refs.tableInventory.loadInventory(); 
+    }
     }
 };
 </script>

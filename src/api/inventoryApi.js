@@ -34,7 +34,14 @@ export const listInventory = async (inventoryName, active, page = 0, limit = 10,
 };
 
 
-
+export const changeActiveById = async (id) => {
+    try {
+        const response = await Axios.put(`${HOST}/api/public/inventory/changeactive/${id}`,);
+        return response.data;
+    } catch (error) {
+        throw new Error(`${error}`);
+    }
+};
 
 // /api/public/inventory/get/{{Id}}
 export const getInventoryById = async (id) => {
