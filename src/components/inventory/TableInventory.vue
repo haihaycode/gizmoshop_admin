@@ -3,22 +3,34 @@
         <TableComponent>
             <!-- Header Slot -->
             <template #header>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-50 uppercase tracking-wider">Stt</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-50 uppercase tracking-wider">Tên kho</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-50 uppercase tracking-wider">Thành phố</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-50 uppercase tracking-wider">Huyện</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-50 uppercase tracking-wider">Xã</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-50 uppercase tracking-wider">Kinh độ</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-50 uppercase tracking-wider">Vĩ độ</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-50 uppercase tracking-wider">Trạng thái</th>
+                <th class=" px-6 py-3 text-left text-xs font-medium text-gray-50 uppercase tracking-wider">Stt</th>
+                <th @click="changeSort('inventoryName')" class="px-6 py-3 text-left text-xs font-medium text-gray-50 uppercase tracking-wider">  
+                    Tên kho <span v-html="getSortIcon('inventoryName')"></span>
+                </th>
+                <th @click="changeSort('city')" class="px-6 py-3 text-left text-xs font-medium text-gray-50 uppercase tracking-wider">  
+                    Thành phố <span v-html="getSortIcon('city')"></span>
+                </th>
+                <th @click="changeSort('district')" class="px-6 py-3 text-left text-xs font-medium text-gray-50 uppercase tracking-wider">  
+                    Huyện <span v-html="getSortIcon('district')"></span>
+                </th>
+                <th @click="changeSort('ward')" class="px-6 py-3 text-left text-xs font-medium text-gray-50 uppercase tracking-wider">  
+                    Xã <span v-html="getSortIcon('ward')"></span>
+                </th>
+                <th @click="changeSort('longitude')" class="px-6 py-3 text-left text-xs font-medium text-gray-50 uppercase tracking-wider">  
+                    Kinh độ <span v-html="getSortIcon('longitude')"></span>
+                </th>
+                <th @click="changeSort('latitude')" class="px-6 py-3 text-left text-xs font-medium text-gray-50 uppercase tracking-wider">  
+                    Vĩ độ <span v-html="getSortIcon('latitude')"></span>
+                </th>
+                <th @click="changeSort('active')" class="px-6 py-3 text-left text-xs font-medium text-gray-50 uppercase tracking-wider">  
+                    Trạng thái <span v-html="getSortIcon('active')"></span>
+                </th>
             </template>
             <!-- Body Slot -->
             <template #body>
-                <tr v-for="(item, index) in inventoryList" :key="index" class="hover:bg-gray-300"
-                    @click="updateInventoryModal(item.id)">
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ index + 1 }}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ item.inventoryName }}
-                    </td>
+                <tr v-for="(item, index) in inventoryList" :key="index" class="hover:bg-gray-300" @click="updateInventoryModal(item.id)">
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ item.id }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ item.inventoryName }}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.city }}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.district }}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.commune }}</td>
@@ -28,16 +40,26 @@
                 </tr>
             </template>
 
-            <!-- Footer Slot (Optional) -->
-            <!-- <template #footer>
-                <td colspan="5" class="px-6 py-3 text-sm text-gray-700">Total: {{ inventoryList.length }} entries</td>
-            </template> -->
+            <template #footer>
+                <td colspan="8"></td>
+            </template>
+
+            <template #pagination>
+                  <div>
+                    <Pagination :total-items="pagination.totalElements"
+                    :items-per-page="limit"
+                    :current-page="page+1"
+                     @page-changed="handlePageChange"
+                     @limit-changed="handleLimitChange"></Pagination>
+                  </div>
+            </template>
+
         </TableComponent>
-
-
-        <updateInventory v-if="idInventorySelected" :id="idInventorySelected" :isOpen="ModalUpdateInventoryIsOpen"
-            @close="updateInventoryModal" @update-success="getListInventory">
+        <!-- update -->
+        <updateInventory v-if="idInventorySelected" :id="idInventorySelected" :isOpen="ModalUpdateInventoryIsOpen" 
+            @close="updateInventoryModal" @update-success="loadInventory">
         </updateInventory>
+
 
     </div>
 </template>
@@ -46,33 +68,71 @@
 import { listInventory } from '@/api/inventoryApi';
 import TableComponent from '../table/TableComponent.vue';
 import updateInventory from './updateInventory.vue';
+import Pagination from '../pagination/Pagination.vue';
+
 export default {
     name: 'TableInventoryComponent',
     components: {
         TableComponent,
-        updateInventory
+        updateInventory,
+        Pagination
     },
     data() {
         return {
             ModalUpdateInventoryIsOpen: false,
             idInventorySelected: null,
+            pagination : [],
             inventoryList: [],
+            sortField: 'id',
+            sortDirection: 'desc',  
+            limit: 5, 
+            page: 0    
         };
     },
-    async created() {
-        this.getListInventory();
+    mounted() {
+        this.loadInventory();
     },
     methods: {
-
-        async getListInventory() {
+        async loadInventory() {
             try {
-              const response = await listInventory(undefined, undefined, undefined, 5, 'id,desc');
+                const response = await listInventory(undefined, undefined, this.page, this.limit, `${this.sortField},${this.sortDirection}`);
+                this.pagination = response.data;
                 this.inventoryList = response.data.content;
-                console.log(this.inventoryList)
+                console.log(this.inventoryList);
             } catch (error) {
                 console.error('Error loading inventory list:', error);
             }
         },
+        async changeSort(column) {
+            if (this.sortField === column) {
+                this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+            } else {
+                this.sortField = column;
+                this.sortDirection = 'asc';
+            }
+            await this.loadInventory();
+        },
+        
+        getSortIcon(column) {
+            if (this.sortField === column) {
+                return this.sortDirection === 'asc' 
+                    ? "<i class='bx bx-sort-a-z'></i>" 
+                    : "<i class='bx bx-sort-z-a'></i>";
+            }
+            return ''; 
+        },
+
+        handlePageChange(newPage){
+            this.page = newPage - 1; 
+            this.loadInventory();
+        },
+        handleLimitChange(limitPanigation){
+            this.limit = limitPanigation;
+            this.page = 0;
+            this.loadInventory();
+        },
+
+
 
         updateInventoryModal(idInventory) {
             this.idInventorySelected = idInventory;

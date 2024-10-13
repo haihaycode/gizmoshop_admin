@@ -20,6 +20,10 @@
                 </tr>
             </tfoot>
         </table>
+        <!-- pagination -->
+        <div class="bg-white p-2 bg-opacity-20">
+            <slot name="pagination"></slot>
+        </div>
     </div>
 </template>
 
