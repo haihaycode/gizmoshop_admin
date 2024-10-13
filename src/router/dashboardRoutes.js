@@ -11,12 +11,13 @@ const dashboardRoutes = [
 
             {
                 path: '',
+                name: 'dashboard',
                 meta: {
-                    title: "Quản trị viên ",
+                    title: "Quản lý chung ",
                     description: "Gizmo"
                 },
                 components: {
-                    default: useComponent('test'),
+                    default: useComponent('dashboard'),
                     header: Header,
                     footer: Footer,
                     sideBar: sideBar
@@ -26,6 +27,30 @@ const dashboardRoutes = [
 
         ]
     },
+    {
+        path: '/inventory',
+        component: useComponent('admin'),
+        children: [
+
+            {
+                path: '',
+                name: 'inventory',
+                meta: {
+                    title: "Quản lý kho",
+                    description: "Gizmo"
+                },
+                components: {
+                    default: useComponent('inventory'),
+                    header: Header,
+                    footer: Footer,
+                    sideBar: sideBar
+                }
+
+            },
+
+        ]
+    },
+
 ];
 
 export default dashboardRoutes;
