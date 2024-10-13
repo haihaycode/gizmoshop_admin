@@ -49,6 +49,28 @@ const dashboardRoutes = [
             },
 
         ]
+    },{
+        path: '/me',
+        component: useComponent('admin'),
+        children: [
+
+            {
+                path: '',
+                name: 'me',
+                meta: {
+                    title: "Thông tin cá nhân",
+                    description: "Gizmo"
+                },
+                components: {
+                    default: useComponent('infoAccount'),
+                    header: Header,
+                    footer: Footer,
+                    sideBar: sideBar
+                }
+
+            },
+
+        ]
     },
 
 ];
