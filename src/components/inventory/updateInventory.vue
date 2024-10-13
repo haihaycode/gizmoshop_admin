@@ -2,7 +2,7 @@
     <ModalBox :isOpen="isOpen" :loading="isLoading" :closeModal="closeModal" :closeText="'Đóng'">
         <!-- Modal Header Slot -->
         <template #header>
-            <h3 class="sm:text-sm md:text-lg font-bold">Thêm kho hàng</h3>
+            <h3 class="sm:text-sm md:text-lg font-bold">Cập nhật kho hàng : {{ form.inventoryName }}</h3>
         </template>
         <!-- Modal Body Slot -->
         <template #body>
@@ -75,7 +75,7 @@
                 </div>
 
                 <div class="flex justify-end">
-                    <Button :isLoading="isLoading" :text="'Lưu'" type="submit"
+                    <Button :isLoading="isLoading" :text="'Cập nhật'" type="submit"
                         class="px-4 py-2 bg-blue-500 text-white rounded-sm hover:bg-blue-600">
                     </Button>
                 </div>
@@ -91,16 +91,26 @@
 import ModalBox from '../modal/ModalBox.vue';
 import { mapGetters } from 'vuex';
 import * as Yup from "yup";
-import { createInventory } from '@/api/inventoryApi';
+import { getInventoryById, updateInventory } from '@/api/inventoryApi'; // Assuming update API exists
 import NotificationModal from '../modal/NotificationModal.vue';
 import Button from '../buttons/button.vue';
 
 export default {
-    name: 'AddNewInventoryComponent',
+    name: 'UpdateInventoryComponent',
     components: {
         ModalBox,
         NotificationModal,
         Button
+    },
+    props: {
+        id: {
+            type: String,
+            required: true,
+        },
+        isOpen: {
+            type: Boolean,
+            default: false,
+        },
     },
     data() {
         return {
@@ -116,29 +126,28 @@ export default {
                 longitude: '',
                 active: true,
             },
-            errors: {
-                inventoryName: '',
-                city: '',
-                district: '',
-                commune: '',
-                latitude: '',
-                longitude: '',
-                active: '',
-            }
+            errors: {}
         };
     },
     computed: {
         ...mapGetters('loading', ['isLoading'])
     },
-    props: {
-        isOpen: {
-            type: Boolean,
-            default: false,
-        },
+    mounted() {
+        this.loadInventoryData();
     },
     methods: {
         closeModal() {
             this.$emit('close');
+        },
+        async loadInventoryData() {
+            try {
+                const inventory = await getInventoryById(this.id);
+                this.form = { ...inventory };
+            } catch (error) {
+                this.message = 'không thể tải dữ liệu kho hàng';
+                this.messageType = 'error';
+                this.NotificationModalIsOpen = true;
+            }
         },
         validateForm() {
             // Reset errors
@@ -184,13 +193,11 @@ export default {
         },
         async submitForm() {
             try {
-                const data = { ...this.form }; // Spread form data into object
-                console.log(data);  // Should correctly log the form data
-                const res = await createInventory(data);
+                const data = { ...this.form };
+                const res = await updateInventory(this.id, data);
                 this.message = res.message;
                 this.messageType = 'success';
                 this.NotificationModalIsOpen = true;
-
             } catch (error) {
                 this.message = error.message;
                 this.messageType = 'error';
@@ -202,7 +209,6 @@ export default {
 </script>
 
 <style scoped>
-/* Custom styles for removing borders except for the bottom */
 input {
     border: none;
     border-bottom: 2px solid #ddd;
@@ -211,6 +217,5 @@ input {
 input:focus {
     outline: none;
     border-bottom-color: #3b82f6;
-    /* Blue border on focus */
 }
 </style>
