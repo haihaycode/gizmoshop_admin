@@ -99,7 +99,6 @@ export default {
                 const response = await listInventory(undefined, undefined, this.page, this.limit, `${this.sortField},${this.sortDirection}`);
                 this.pagination = response.data;
                 this.inventoryList = response.data.content;
-                console.log(this.inventoryList);
             } catch (error) {
                 console.error('Error loading inventory list:', error);
             }
