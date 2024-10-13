@@ -142,7 +142,7 @@ export default {
         async loadInventoryData() {
             try {
                 const inventory = await getInventoryById(this.id);
-                this.form = { ...inventory };
+                this.form = inventory.data;
             } catch (error) {
                 this.message = 'không thể tải dữ liệu kho hàng';
                 this.messageType = 'error';
@@ -198,6 +198,7 @@ export default {
                 this.message = res.message;
                 this.messageType = 'success';
                 this.NotificationModalIsOpen = true;
+                this.$emit('update-success');
             } catch (error) {
                 this.message = error.message;
                 this.messageType = 'error';
