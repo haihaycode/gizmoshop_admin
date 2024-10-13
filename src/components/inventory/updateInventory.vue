@@ -118,12 +118,12 @@ export default {
             messageType: '',
             message: '',
             form: {
-                inventoryName: '',
-                city: '',
-                district: '',
-                commune: '',
-                latitude: '',
-                longitude: '',
+                inventoryName: '...',
+                city: '....',
+                district: '......',
+                commune: '......',
+                latitude: '......',
+                longitude: '.....',
                 active: true,
             },
             errors: {}
