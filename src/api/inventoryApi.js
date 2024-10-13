@@ -19,14 +19,21 @@ export const createInventory = async (inventoryObject) => {
         throw new Error(`${error}`);
     }
 };
-export const listInventory = async () => {
+
+// /api/public/inventory/list
+export const listInventory = async (inventoryName, active, page = 0, limit = 10, sort = 'id,asc') => {
+    const params = { inventoryName, active, page, limit, sort };
     try {
-        const response = await Axios.get(`${HOST}/api/public/inventory/list`);
+        const response = await Axios.get(`${HOST}/api/public/inventory/list`, {
+            params: params
+        });
         return response.data;
     } catch (error) {
-        throw new Error(`${error}`);
+        throw new Error(`Error fetching inventory: ${error}`);
     }
 };
+
+
 
 
 // /api/public/inventory/get/{{Id}}

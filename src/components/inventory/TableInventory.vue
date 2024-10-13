@@ -42,6 +42,7 @@ export default {
     name: 'TableInventoryComponent',
     components: {
         TableComponent,
+
     },
     data() {
         return {
@@ -50,7 +51,7 @@ export default {
     },
     async created() {
         try {
-            const response = await listInventory();
+            const response = await listInventory(undefined, undefined, undefined, 5, 'id,desc');
             this.inventoryList = response.data.content;
             console.log(this.inventoryList)
         } catch (error) {
