@@ -9,3 +9,12 @@ export const createInventory = async (inventoryObject) => {
         throw new Error(`${error}`);
     }
 };
+export const listInventory = async () => {
+    try {
+        const response = await Axios.get(`${HOST}/api/public/inventory/list`);
+        return response.data;
+    } catch (error) {
+        throw new Error(`${error}`);
+    }
+};
+

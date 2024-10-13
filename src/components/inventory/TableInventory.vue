@@ -3,47 +3,61 @@
         <TableComponent>
             <!-- Header Slot -->
             <template #header>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-50 uppercase tracking-wider">Name</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-50 uppercase tracking-wider">Age</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-50 uppercase tracking-wider">Country</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-50 uppercase tracking-wider">Email</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-50 uppercase tracking-wider">Phone</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-50 uppercase tracking-wider">Stt</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-50 uppercase tracking-wider">Tên kho</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-50 uppercase tracking-wider">Thành phố</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-50 uppercase tracking-wider">Huyện</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-50 uppercase tracking-wider">Xã</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-50 uppercase tracking-wider">Kinh độ</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-50 uppercase tracking-wider">Vĩ độ</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-50 uppercase tracking-wider">Trạng thái</th>
             </template>
-
             <!-- Body Slot -->
             <template #body>
-                <tr class="">
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">John Doe</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">25</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">USA</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">john@example.com</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">123-456-7890</td>
-                </tr>
-                <tr class="">
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Jane Smith</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">30</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Canada</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">jane@example.com</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">987-654-3210</td>
+                <tr v-for="(item, index) in inventoryList" :key="index" class="hover:bg-gray-300" >
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{index + 1}}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ item.inventoryName }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.city }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.district }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.commune }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.longitude }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.latitude }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.active }}</td>
                 </tr>
             </template>
 
             <!-- Footer Slot (Optional) -->
-            <template #footer>
-                <td colspan="5" class="px-6 py-3 text-sm text-gray-700">Total: 2 entries</td>
-            </template>
+            <!-- <template #footer>
+                <td colspan="5" class="px-6 py-3 text-sm text-gray-700">Total: {{ inventoryList.length }} entries</td>
+            </template> -->
         </TableComponent>
     </div>
 </template>
 
 <script>
+import { listInventory } from '@/api/inventoryApi';
 import TableComponent from '../table/TableComponent.vue';
+
 export default {
     name: 'TableInventoryComponent',
     components: {
         TableComponent,
     },
-}
+    data() {
+        return {
+            inventoryList: [],
+        };
+    },
+    async created() {
+        try {
+            const response = await listInventory();
+            this.inventoryList = response.data.content;
+            console.log(this.inventoryList)
+        } catch (error) {
+            console.error('Error loading inventory list:', error);
+        }
+    },
+};
 </script>
 
 <style></style>

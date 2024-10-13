@@ -174,11 +174,9 @@ export default {
 
             schema.validate(this.form, { abortEarly: false })
                 .then(() => {
-                    // No validation errors, proceed with form submission
                     this.submitForm();
                 })
                 .catch(err => {
-                    // Populate errors
                     err.inner.forEach((validationError) => {
                         this.errors[validationError.path] = validationError.message;
                     });
