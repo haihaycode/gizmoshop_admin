@@ -64,6 +64,12 @@ Axios.interceptors.response.use(
         const originalRequest = error.config;
         store.dispatch('loading/setLoading', false); // Tắt loading khi có lỗi
 
+
+        if (error.message === 'Network Error') {
+            notificationService.error('Không thể kết nối mạng. Vui lòng kiểm tra kết nối internet của bạn.'); // Notify the user
+            return Promise.reject(error);
+        }
+
         // Kiểm tra xem có phải lỗi do timeout không
         if (error.code === 'ECONNABORTED' && error.message.includes('timeout')) {
             notificationService.error('Yêu cầu đã quá thời gian chờ. Vui lòng thử lại.'); // Hiển thị thông báo lỗi timeout
@@ -114,7 +120,6 @@ Axios.interceptors.response.use(
 
         // Xử lý các lỗi khác
         if (error.response && error.response.data) {
-            console.log(error.response.data.message)
             notificationService.error(error.response.data.message || 'Có lỗi xảy ra!'); // Hiển thị thông báo lỗi
         }
 

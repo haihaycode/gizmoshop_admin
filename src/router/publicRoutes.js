@@ -10,6 +10,7 @@ const publicRoutes = [
 
             {
                 path: '',
+                name : 'login',
                 meta: {
                     title: "Quản trị viên",
                     description: "Đăng nhập"
