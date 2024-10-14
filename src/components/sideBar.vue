@@ -30,12 +30,12 @@
                 </li>
                 <span class="text-white font-bold">NHÂN VIÊN</span>
                 <li class="mb-1 group">
-                    <a href=""
+                    <RouterLink :to="{ name: 'staff'}"
                         class="flex font-semibold items-center py-2 px-4 text-white hover:bg-gray-100 hover:bg-opacity-5 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100 sidebar-dropdown-toggle">
                         <i class='bx bxl-blogger mr-3 text-lg'></i>
                         <span class="text-sm">Danh sách</span>
                         <i class="ri-arrow-right-s-line ml-auto group-[.selected]:rotate-90"></i>
-                    </a>
+                    </RouterLink>
                 </li>
                 <li class="mb-1 group">
                     <a href=""

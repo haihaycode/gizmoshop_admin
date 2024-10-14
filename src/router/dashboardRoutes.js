@@ -49,7 +49,7 @@ const dashboardRoutes = [
             },
 
         ]
-    },{
+    }, {
         path: '/me',
         component: useComponent('admin'),
         children: [
@@ -63,6 +63,28 @@ const dashboardRoutes = [
                 },
                 components: {
                     default: useComponent('infoAccount'),
+                    header: Header,
+                    footer: Footer,
+                    sideBar: sideBar
+                }
+
+            },
+
+        ]
+    }, {
+        path: '/staff',
+        component: useComponent('admin'),
+        children: [
+
+            {
+                path: '',
+                name: 'staff',
+                meta: {
+                    title: "Danh sách nhân viên",
+                    description: "Gizmo"
+                },
+                components: {
+                    default: useComponent('listStaff'),
                     header: Header,
                     footer: Footer,
                     sideBar: sideBar
