@@ -23,6 +23,7 @@
     },
     methods: {
       performSearch() {
+        // Phát sự kiện và truyền từ khóa tìm kiếm đến component cha
         this.$emit('search', this.searchQuery);
       }
     }
@@ -30,6 +31,6 @@
   </script>
   
   <style scoped>
-
+  /* Thêm style tùy chọn nếu cần */
   </style>
   
