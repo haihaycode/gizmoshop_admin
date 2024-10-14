@@ -63,6 +63,8 @@
         </div>
       </template>
     </TableComponent>
+
+    <setRoleComponentVue :id="idAccountSelected" :isOpen="ModalUpdateIsOpen"></setRoleComponentVue>
   </div>
 </template>
 
@@ -72,16 +74,21 @@ import TableComponent from '../table/TableComponent.vue';
 import toggleButton from '../buttons/toggleButton.vue';
 import dayjs from "dayjs";
 
+
+
+import setRoleComponentVue from './setRoleComponent.vue';
+
 export default {
   name: 'listStaffComponent',
   components: {
     TableComponent,
-    toggleButton
+    toggleButton,
+    setRoleComponentVue
   },
   data() {
     return {
-      ModalUpdateInventoryIsOpen: false,
-      idInventorySelected: null,
+      ModalUpdateIsOpen: false,
+      idAccountSelected: null,
       pagination: [],
       staffList: [],
       sortField: 'id',
@@ -168,7 +175,7 @@ export default {
     //    } catch (error) {
     //     console.log(error)
     //    }
-
+       
     //     },
   }
 }
