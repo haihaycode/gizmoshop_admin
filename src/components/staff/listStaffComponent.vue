@@ -1,9 +1,6 @@
 <template>
   <div>
-<div class="flex ">
-  <filterRolesComponent></filterRolesComponent>
-  <search-component @search="loadInventory"></search-component>
-</div>
+  <filterRolesComponent @search="loadInventory"></filterRolesComponent>
     <TableComponent>
       <!-- Header Slot -->
       <template #header>
@@ -81,7 +78,6 @@ import TableComponent from '../table/TableComponent.vue';
 import toggleButton from '../buttons/toggleButton.vue';
 import Pagination from '../pagination/Pagination.vue';
 import filterRolesComponent from './filterRolesComponent.vue';
-import searchComponent from './searchComponent.vue';
 import dayjs from "dayjs";
 
 
@@ -96,7 +92,7 @@ export default {
     setRoleComponentVue,
     Pagination,
     filterRolesComponent,
-    searchComponent
+
   },
   data() {
     return {
@@ -144,16 +140,17 @@ export default {
     this.loadInventory();
   },
   methods: {
-    async loadInventory(keyword) {
-      try {
-        const response = await listStaff(keyword, undefined, undefined, this.page, this.limit, `${this.sortField},${this.sortDirection}`);
-        this.pagination = response.data;
-        this.staffList = response.data.content;
-        console.log(response);
-      } catch (error) {
-        console.error('Error loading staff list:', error);
-      }
+    async loadInventory(keyword, role) {
+        try {
+            const response = await listStaff(keyword, undefined, role, this.page, this.limit, `${this.sortField},${this.sortDirection}`);
+            this.pagination = response.data;
+            this.staffList = response.data.content;
+            console.log(response);
+        } catch (error) {
+            console.error('Error loading staff list:', error);
+        }
     },
+
     async changeSort(column) {
       if (this.sortField === column) {
         this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
