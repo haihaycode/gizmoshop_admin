@@ -7,7 +7,7 @@
         <span class="absolute left-0 w-6 h-6 bg-white rounded-full shadow transform transition-transform duration-300" 
               :class="{'translate-x-full': localToggled}"></span>
       </label>
-      <span class="ml-2 font-medium" :class="{'text-blue-400': localToggled, 'text-red-500': !localToggled}">
+      <span class="ml-2 font-medium" :class="{'text-blue-500': localToggled, 'text-red-500': !localToggled}">
         {{ localToggled ? 'Đang hoạt động' : 'Không hoạt động' }}
       </span>
     </div>

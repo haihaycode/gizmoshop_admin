@@ -9,29 +9,29 @@
             v-html="getSortIcon('id')"></span></th>
         <th @click="changeSort('fullname')"
           class="px-6 py-3 text-left text-xs font-medium text-gray-50 uppercase tracking-wider">Tên Nhân Viên <span
-            v-html="getSortIcon('inventoryName')"></span></th>
+            v-html="getSortIcon('fullname')"></span></th>
         <th @click="changeSort('email')"
           class="px-6 py-3 text-left text-xs font-medium text-gray-50 uppercase tracking-wider">Email <span
-            v-html="getSortIcon('city')"></span></th>
+            v-html="getSortIcon('email')"></span></th>
         <th @click="changeSort('sdt')"
           class="px-6 py-3 text-left text-xs font-medium text-gray-50 uppercase tracking-wider">Số điện thoại <span
-            v-html="getSortIcon('district')"></span></th>
+            v-html="getSortIcon('sdt')"></span></th>
         <th @click="changeSort('birthday')"
           class="px-6 py-3 text-left text-xs font-medium text-gray-50 uppercase tracking-wider">Năm sinh<span
-            v-html="getSortIcon('ward')"></span></th>
+            v-html="getSortIcon('birthday')"></span></th>
         <th @click="changeSort('extra_info')"
           class="px-6 py-3 text-left text-xs font-medium text-gray-50 uppercase tracking-wider">Thông tin thêm <span
-            v-html="getSortIcon('longitude')"></span></th>
-        <th @click="changeSort('extra_info')"
+            v-html="getSortIcon('extra_info')"></span></th>
+        <th @click="changeSort('roles')"
           class="px-6 py-3 text-left text-xs font-medium text-gray-50 uppercase tracking-wider">Quyền <span
-            v-html="getSortIcon('longitude')"></span></th>
-        <th @click="changeSort('formattedCreateAt')"
+            v-html="getSortIcon('roles')"></span></th>
+        <th @click="changeSort('updateDate')"
           class="px-6 py-3 text-left text-xs font-medium text-gray-50 uppercase tracking-wider">Cập nhật lần cuối<span
-            v-html="getSortIcon('latitude')"></span></th>
+            v-html="getSortIcon('updateDate')"></span></th>
             <th class="px-6 py-3 text-left text-xs font-medium text-gray-50 uppercase tracking-wider">Cập nhật quyền</th>
         <th @click="changeSort('deleted')"
           class="px-6 py-3 text-left text-xs font-medium text-gray-50 uppercase tracking-wider">Trạng thái <span
-            v-html="getSortIcon('active')"></span></th>
+            v-html="getSortIcon('deleted')"></span></th>
       </template>
 
       <!-- Body Slot -->
@@ -48,7 +48,7 @@
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" @click="handleChangeRole(item.id)"><i
               class='bx bxs-edit-alt'></i></td>
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-            <toggleButton :is-toggled="item.deleted"></toggleButton>
+            <toggleButton :is-toggled="!item.deleted"></toggleButton>
           </td>
         </tr>
       </template>
@@ -163,7 +163,7 @@ export default {
     },
     getSortIcon(column) {
       if (this.sortField === column) {
-        return this.sortDirection === 'desc'
+        return this.sortDirection === 'asc'
           ? "<i class='bx bx-sort-a-z'></i>"
           : "<i class='bx bx-sort-z-a'></i>";
       }
