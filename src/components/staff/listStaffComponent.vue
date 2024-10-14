@@ -1,9 +1,9 @@
 <template>
   <div>
-<div class="flex ">
-  <filterRolesComponent></filterRolesComponent>
-  <search-component @search="loadInventory"></search-component>
-</div>
+    <div class="flex ">
+      <filterRolesComponent></filterRolesComponent>
+      <search-component @search="loadInventory"></search-component>
+    </div>
     <TableComponent>
       <!-- Header Slot -->
       <template #header>
@@ -31,7 +31,7 @@
         <th @click="changeSort('formattedCreateAt')"
           class="px-6 py-3 text-left text-xs font-medium text-gray-50 uppercase tracking-wider">Cập nhật lần cuối<span
             v-html="getSortIcon('latitude')"></span></th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-50 uppercase tracking-wider">Cập nhật quyền</th>
+        <th class="px-6 py-3 text-left text-xs font-medium text-gray-50 uppercase tracking-wider">Cập nhật quyền</th>
         <th @click="changeSort('deleted')"
           class="px-6 py-3 text-left text-xs font-medium text-gray-50 uppercase tracking-wider">Trạng thái <span
             v-html="getSortIcon('active')"></span></th>
@@ -39,8 +39,7 @@
 
       <!-- Body Slot -->
       <template #body>
-        <tr v-for="(item, index) in formattedStaffList" :key="index" class="hover:bg-gray-300"
-          @click="updateInventoryModal(item.id)">
+        <tr v-for="(item, index) in formattedStaffList" :key="index" class="hover:bg-gray-300">
           <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ index + 1 }}</td>
           <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ item.fullname }}</td>
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.email }}</td>
@@ -63,15 +62,16 @@
 
       <template #pagination>
         <div>
-          <Pagination :total-items="pagination.totalElements" :items-per-page="limit" :current-page="page + 1"
+          <Pagination :total-items="Number(pagination.totalElements)" :items-per-page="limit" :current-page="page + 1"
             @page-changed="handlePageChange" @limit-changed="handleLimitChange"></Pagination>
         </div>
       </template>
     </TableComponent>
 
     <setRoleComponentVue v-if="idAccountSelected" :id="idAccountSelected" :isOpen="ModalUpdateIsOpen"
-      @close="handleChangeRole(null)">
+      :userRoles="roleUser" @close="handleChangeRole(null)" @loadingList="loadInventory">
     </setRoleComponentVue>
+
   </div>
 </template>
 
@@ -83,9 +83,6 @@ import Pagination from '../pagination/Pagination.vue';
 import filterRolesComponent from './filterRolesComponent.vue';
 import searchComponent from './searchComponent.vue';
 import dayjs from "dayjs";
-
-
-
 import setRoleComponentVue from './setRoleComponent.vue';
 
 export default {
@@ -102,6 +99,7 @@ export default {
     return {
       ModalUpdateIsOpen: false,
       idAccountSelected: null,
+      roleUser: [],
       pagination: [],
       staffList: [],
       sortField: 'id',
@@ -181,9 +179,10 @@ export default {
       this.page = 0;
       this.loadInventory();
     },
-    handleChangeRole(idAccount) {
-      this.idAccountSelected = idAccount;
+    handleChangeRole(accountId) {
       this.ModalUpdateIsOpen = !this.ModalUpdateIsOpen;
+      this.idAccountSelected = accountId;
+      this.roleUser = this.staffList.find(staff => staff.id === accountId)?.roles || [];
     }
     // async updateStatusInventory(id){
     //    try {
@@ -192,7 +191,7 @@ export default {
     //    } catch (error) {
     //     console.log(error)
     //    }
-       
+
     //     },
   }
 }

@@ -9,3 +9,14 @@ export const getAllRoles = async () => {
         throw new Error(`${error}`);
     }
 };
+
+
+// Hàm để thêm vai trò cho tài khoản
+export const addRole = async (accountId, roleNames) => {
+    try {
+        const response = await Axios.patch(`${HOST}/api/admin/${accountId}/roles/add`, roleNames);
+        return response.data;
+    } catch (error) {
+        throw new Error(`Error adding roles: ${error.message}`);
+    }
+};
