@@ -27,7 +27,7 @@
         <th @click="changeSort('formattedCreateAt')"
           class="px-6 py-3 text-left text-xs font-medium text-gray-50 uppercase tracking-wider">Cập nhật lần cuối<span
             v-html="getSortIcon('latitude')"></span></th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-50 uppercase tracking-wider">Cập nhật quyền</th>
+        <th class="px-6 py-3 text-left text-xs font-medium text-gray-50 uppercase tracking-wider">Cập nhật quyền</th>
         <th @click="changeSort('deleted')"
           class="px-6 py-3 text-left text-xs font-medium text-gray-50 uppercase tracking-wider">Trạng thái <span
             v-html="getSortIcon('active')"></span></th>
@@ -35,8 +35,7 @@
 
       <!-- Body Slot -->
       <template #body>
-        <tr v-for="(item, index) in formattedStaffList" :key="index" class="hover:bg-gray-300"
-          @click="updateInventoryModal(item.id)">
+        <tr v-for="(item, index) in formattedStaffList" :key="index" class="hover:bg-gray-300">
           <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ index + 1 }}</td>
           <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ item.fullname }}</td>
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.email }}</td>
@@ -45,7 +44,8 @@
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.extra_info }}</td>
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.roles }}</td>
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.updateAt }}</td>
-          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><i class='bx bxs-edit-alt'></i></td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" @click="handleChangeRole(item.id)"><i
+              class='bx bxs-edit-alt'></i></td>
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
             <toggleButton :is-toggled="item.deleted"></toggleButton>
           </td>
@@ -64,7 +64,9 @@
       </template>
     </TableComponent>
 
-    <setRoleComponentVue :id="idAccountSelected" :isOpen="ModalUpdateIsOpen"></setRoleComponentVue>
+    <setRoleComponentVue v-if="idAccountSelected" :id="idAccountSelected" :isOpen="ModalUpdateIsOpen"
+      @close="handleChangeRole(null)">
+    </setRoleComponentVue>
   </div>
 </template>
 
@@ -168,6 +170,10 @@ export default {
       this.page = 0;
       this.loadInventory();
     },
+    handleChangeRole(idAccount) {
+      this.idAccountSelected = idAccount;
+      this.ModalUpdateIsOpen = !this.ModalUpdateIsOpen;
+    }
     // async updateStatusInventory(id){
     //    try {
     //    await changeActiveById(id);
@@ -175,7 +181,7 @@ export default {
     //    } catch (error) {
     //     console.log(error)
     //    }
-       
+
     //     },
   }
 }

@@ -21,6 +21,7 @@
 <script>
 import ModalBox from '../modal/ModalBox.vue'
 import { mapGetters } from 'vuex';
+import { getAllRoles } from '@/api/roleApi';
 export default {
     name: 'setRoleComponent',
     components: {
@@ -39,12 +40,32 @@ export default {
     data() {
         return {
             selectedRoles: [], // to store selected roles
-            roles: ['ROLE_USER', 'ROLE_ADMIN', 'ROLE_MANAGER'],
+            roles: [], // Default roles in case API doesn't respond
         }
     },
     computed: {
-        ...mapGetters('loading', ['isLoading'])
+        ...mapGetters('loading', ['isLoading']),
     },
+    watch: {
+        isOpen(newVal) {
+            if (newVal) {
+                this.getRoles(); // Fetch roles when the modal is opened
+            }
+        }
+    },
+    methods: {
+        async getRoles() {
+            try {
+                const response = await getAllRoles();
+                this.roles = response.data;
+            } catch (error) {
+                console.error("Error fetching roles:", error);
+            }
+        },
+        closeModal() {
+            this.$emit('close');
+        }
+    }
 }
 </script>
 
