@@ -1,4 +1,5 @@
 <template>
+   <div>
     <div class="table-container overflow-x-auto">
         <table class="min-w-full border-collapse table-auto">
             <!-- Table Header -->
@@ -21,10 +22,14 @@
             </tfoot>
         </table>
         <!-- pagination -->
+      
+
+    </div>
+
         <div class="bg-white p-2 bg-opacity-20">
             <slot name="pagination"></slot>
-        </div>
-    </div>
+        </div>  
+   </div>
 </template>
 
 <script>

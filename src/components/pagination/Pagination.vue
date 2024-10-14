@@ -1,10 +1,9 @@
 <template>
-  <div class="flex justify-between items-center">
+  <div class="flex justify-between items-center overflow-x-auto">
     <div>
       <!-- Select option to change items per page -->
       <select v-model="localItemsPerPage" @change="updateLimit" class="px-2 py-1 ">
-        <option class="bg-opacity-0" v-for="option in limitOptions" :key="option" :value="option">{{ option }} mục mỗi
-          trang</option>
+        <option class="bg-opacity-0" v-for="option in limitOptions" :key="option" :value="option">{{ option }} mục</option>
       </select>
     </div>
 
@@ -17,7 +16,7 @@
       </button>
 
       <button v-if="currentPage > 1" @click="goToPage(1)"
-        class="mx-1 px-3 py-1 bg-gray-400 rounded-md hover:bg-gray-500 transition-colors duration-200">1</button>
+        class="mx-1 px-3 py-1 bg-gray-200 rounded-md hover:bg-gray-500 transition-colors duration-200">1</button>
 
       <span v-if="currentPage > 3" class="mx-1">...</span>
 
@@ -31,11 +30,11 @@
       <span v-if="currentPage < totalPages - 2" class="mx-1">...</span>
 
       <button v-if="currentPage < totalPages" @click="goToPage(totalPages)"
-        class="mx-1 px-3 py-1 bg-gray-400 rounded-md hover:bg-gray-500 transition-colors duration-200">{{ totalPages
+        class="mx-1 px-3 py-1 bg-gray-200 rounded-md hover:bg-gray-500 transition-colors duration-200">{{ totalPages
         }}</button>
 
       <button @click="nextPage" :disabled="currentPage === totalPages"
-        class="mx-1 px-3 py-1 bg-gray-200 rounded-md hover:bg-gray-400 transition-colors duration-200"
+        class="mx-1 px-3 py-1 bg-gray-200 rounded-md hover:bg-gray-500 transition-colors duration-200"
         aria-label="Next">
         <i class='bx bxs-chevrons-right'></i>
       </button>
@@ -44,7 +43,7 @@
     <!-- Pagination -->
 
     <div>
-      <div>
+      <div class="px-2">
         <!-- Display current page info -->
         Trang {{ currentPage }} / {{ totalPages }}
       </div>

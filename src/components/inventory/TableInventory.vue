@@ -3,7 +3,7 @@
         <TableComponent>
             <!-- Header Slot -->
             <template #header>
-                <th class=" px-6 py-3 text-left text-xs font-medium text-gray-50 uppercase tracking-wider">Stt</th>
+                <th  @click="changeSort('id')"  class=" px-6 py-3 text-left text-xs font-medium text-gray-50 uppercase tracking-wider">Stt <span v-html="getSortIcon('id')"></span></th>
                 <th @click="changeSort('inventoryName')" class="px-6 py-3 text-left text-xs font-medium text-gray-50 uppercase tracking-wider">  
                     Tên kho <span v-html="getSortIcon('inventoryName')"></span>
                 </th>
@@ -29,7 +29,7 @@
             <!-- Body Slot -->
             <template #body>
                 <tr v-for="(item, index) in inventoryList" :key="index" class="hover:bg-gray-300" @click="updateInventoryModal(item.id)">
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ item.id }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ index + 1 }}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ item.inventoryName }}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.city }}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.district }}</td>
