@@ -1,5 +1,9 @@
 <template>
   <div>
+<div class="flex ">
+  <filterRolesComponent></filterRolesComponent> 
+  <search-component @search="loadInventory"></search-component>
+</div>
     <TableComponent>
       <!-- Header Slot -->
       <template #header>
@@ -27,7 +31,7 @@
         <th @click="changeSort('formattedCreateAt')"
           class="px-6 py-3 text-left text-xs font-medium text-gray-50 uppercase tracking-wider">Cập nhật lần cuối<span
             v-html="getSortIcon('latitude')"></span></th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-50 uppercase tracking-wider">Cập nhật quyền</th>
+        <th class="px-6 py-3 text-left text-xs font-medium text-gray-50 uppercase tracking-wider">Cập nhật quyền</th>
         <th @click="changeSort('deleted')"
           class="px-6 py-3 text-left text-xs font-medium text-gray-50 uppercase tracking-wider">Trạng thái <span
             v-html="getSortIcon('active')"></span></th>
@@ -37,7 +41,7 @@
       <template #body>
         <tr v-for="(item, index) in formattedStaffList" :key="index" class="hover:bg-gray-300"
           @click="updateInventoryModal(item.id)">
-          <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ index + 1 }}</td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ item.id }}</td>
           <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ item.fullname }}</td>
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.email }}</td>
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.sdt }}</td>
@@ -72,6 +76,9 @@
 import { listStaff } from '@/api/staffApi.js';
 import TableComponent from '../table/TableComponent.vue';
 import toggleButton from '../buttons/toggleButton.vue';
+import Pagination from '../pagination/Pagination.vue';
+import filterRolesComponent from './filterRolesComponent.vue';
+import searchComponent from './searchComponent.vue';
 import dayjs from "dayjs";
 
 
@@ -83,7 +90,10 @@ export default {
   components: {
     TableComponent,
     toggleButton,
-    setRoleComponentVue
+    setRoleComponentVue,
+    Pagination,
+    filterRolesComponent,
+    searchComponent
   },
   data() {
     return {
@@ -131,9 +141,9 @@ export default {
     this.loadInventory();
   },
   methods: {
-    async loadInventory() {
+    async loadInventory(keyword) {
       try {
-        const response = await listStaff(undefined, undefined, undefined, this.page, this.limit, `${this.sortField},${this.sortDirection}`);
+        const response = await listStaff(keyword, undefined, undefined, this.page, this.limit, `${this.sortField},${this.sortDirection}`);
         this.pagination = response.data;
         this.staffList = response.data.content;
         console.log(response);
@@ -175,7 +185,7 @@ export default {
     //    } catch (error) {
     //     console.log(error)
     //    }
-       
+
     //     },
   }
 }

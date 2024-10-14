@@ -29,7 +29,7 @@
             <!-- Body Slot -->
             <template #body>
                 <tr v-for="(item, index) in inventoryList" :key="index" class="hover:bg-gray-300" @click="updateInventoryModal(item.id)">
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ index + 1 }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{item.id}}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ item.inventoryName }}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.city }}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.district }}</td>
@@ -76,7 +76,7 @@ export default {
         TableComponent,
         updateInventory,
         Pagination,
-        toggleButton
+        toggleButton,
     },
     data() {
         return {
