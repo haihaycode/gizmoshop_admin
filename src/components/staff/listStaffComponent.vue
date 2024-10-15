@@ -1,6 +1,6 @@
 <template>
   <div>
-  <filterRolesComponent @search="loadInventory"></filterRolesComponent>
+    <filterRolesComponent @search="loadInventory"></filterRolesComponent>
     <TableComponent>
       <!-- Header Slot -->
       <template #header>
@@ -28,7 +28,7 @@
         <th @click="changeSort('updateDate')"
           class="px-6 py-3 text-left text-xs font-medium text-gray-50 uppercase tracking-wider">Cập nhật lần cuối<span
             v-html="getSortIcon('updateDate')"></span></th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-50 uppercase tracking-wider">Cập nhật quyền</th>
+        <th class="px-6 py-3 text-left text-xs font-medium text-gray-50 uppercase tracking-wider">Cập nhật quyền</th>
         <th @click="changeSort('deleted')"
           class="px-6 py-3 text-left text-xs font-medium text-gray-50 uppercase tracking-wider">Trạng thái <span
             v-html="getSortIcon('deleted')"></span></th>
@@ -37,7 +37,7 @@
       <!-- Body Slot -->
       <template #body>
         <tr v-for="(item, index) in formattedStaffList" :key="index" class="hover:bg-gray-300">
-          <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ index + 1 }}</td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ item.id }}</td>
           <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ item.fullname }}</td>
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.email }}</td>
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.sdt }}</td>
@@ -45,10 +45,11 @@
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.extra_info }}</td>
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.roles }}</td>
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.updateAt }}</td>
-          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" @click="handleChangeRole(item.id)"><i
-              class='bx bxs-edit-alt'></i></td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><i @click="handleChangeRole(item.id)"
+              class='bx bxs-edit-alt'></i>&nbsp;
+              <i @click="handleresetpass(item.id)" class='bx bxs-user'></i></td>
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-            <toggleButton :is-toggled="!item.deleted"></toggleButton>
+            <toggleButton :is-toggled="!item.deleted" @update:isToggled="updateDeleted(item.id)"></toggleButton>
           </td>
         </tr>
       </template>
@@ -73,11 +74,12 @@
 </template>
 
 <script>
-import { listStaff } from '@/api/staffApi.js';
+import { listStaff, updateRoles, resertAccount } from '@/api/staffApi.js';
 import TableComponent from '../table/TableComponent.vue';
 import toggleButton from '../buttons/toggleButton.vue';
 import Pagination from '../pagination/Pagination.vue';
 import filterRolesComponent from './filterRolesComponent.vue';
+import notificationService from '@/services/notificationService';
 import dayjs from "dayjs";
 
 
@@ -142,14 +144,14 @@ export default {
   },
   methods: {
     async loadInventory(keyword, role) {
-        try {
-            const response = await listStaff(keyword, undefined, role, this.page, this.limit, `${this.sortField},${this.sortDirection}`);
-            this.pagination = response.data;
-            this.staffList = response.data.content;
-            console.log(response);
-        } catch (error) {
-            console.error('Error loading staff list:', error);
-        }
+      try {
+        const response = await listStaff(keyword, undefined, role, this.page, this.limit, `${this.sortField},${this.sortDirection}`);
+        this.pagination = response.data;
+        this.staffList = response.data.content;
+        console.log(response);
+      } catch (error) {
+        console.error('Error loading staff list:', error);
+      }
     },
 
     async changeSort(column) {
@@ -161,6 +163,16 @@ export default {
       }
       await this.loadInventory();
     },
+    async resetPass(accountId){
+          try {
+            await resertAccount(accountId)
+            notificationService.success("reset password thành công")         
+          } catch (error) {
+            notificationService.error("reset password thất bại")
+            console.log(error)
+          }
+    },
+
     getSortIcon(column) {
       if (this.sortField === column) {
         return this.sortDirection === 'asc'
@@ -183,16 +195,19 @@ export default {
       this.ModalUpdateIsOpen = !this.ModalUpdateIsOpen;
       this.idAccountSelected = accountId;
       this.roleUser = this.staffList.find(staff => staff.id === accountId)?.roles || [];
+    },
+    handleresetpass(accountId){
+      this.resetPass(accountId)
+    },
+    async updateDeleted(id) {
+      try {
+        await updateRoles(id);
+        this.loadInventory();
+      } catch (error) {
+        console.log(error)
+      }
     }
-    // async updateStatusInventory(id){
-    //    try {
-    //    await changeActiveById(id);
-    //    this.loadInventory();
-    //    } catch (error) {
-    //     console.log(error)
-    //    }
 
-    //     },
   }
 }
 </script>
