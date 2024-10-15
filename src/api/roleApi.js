@@ -1,15 +1,16 @@
 import Axios from '@/api/axios';
 import { HOST } from '@/api/config'
 
+
+// Hàm để láy tất cả các roles 
 export const getAllRoles = async () => {
     try {
-        const response = await Axios.get(`${HOST}/api/public/roles/all`,);
+        const response = await Axios.get(`${HOST}/api/public/roles/all`);
         return response.data;
     } catch (error) {
-        throw new Error(`${error}`);
+        throw new Error(`${error.message}`);
     }
 };
-
 
 // Hàm để thêm vai trò cho tài khoản
 export const addRole = async (accountId, roleNames) => {
@@ -20,3 +21,4 @@ export const addRole = async (accountId, roleNames) => {
         throw new Error(`Error adding roles: ${error.message}`);
     }
 };
+

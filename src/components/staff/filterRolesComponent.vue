@@ -1,6 +1,7 @@
 <template>
-    <div class="p-6 bg-white rounded-lg shadow-md w-full flex space-x-6">
-        <div class="w-1/3">
+    <div class="p-6 bg-white rounded-lg shadow-md w-full flex flex-col sm:flex-row sm:space-x-6 space-y-4 sm:space-y-0">
+        <!-- Cột Tìm kiếm quyền -->
+        <div class="w-full sm:w-1/2 md:w-1/3">
             <label for="roles" class="block text-sm font-medium text-gray-700 mb-1">Tìm kiếm quyền</label>
             <div class="relative">
                 <select 
@@ -14,9 +15,10 @@
             </div>
         </div>
 
-        <div class="w-1/3">
+        <!-- Cột Tìm kiếm -->
+        <div class="w-full sm:w-1/2 md:w-1/3">
             <label for="search" class="block text-sm font-medium text-gray-700 mb-1">Tìm kiếm</label>
-            <div class="flex items-center">
+            <div class="flex">
                 <input 
                     type="text" 
                     v-model="searchQuery" 
@@ -33,6 +35,7 @@
         </div>
     </div>
 </template>
+
 
 <script>
 import { getAllRoles } from '@/api/roleApi.js';
