@@ -1,13 +1,13 @@
 <template>
     <ModalBox :isOpen="isOpen" :loading="isLoading" :closeModal="closeModal" :closeText="'Đóng'">
-        <!-- Modal Header Slot -->
+
         <template #header>
             <h3 class="sm:text-sm md:text-lg font-bold">Thêm kho hàng</h3>
         </template>
-        <!-- Modal Body Slot -->
+
         <template #body>
             <form @submit.prevent="validateForm">
-                <!-- Inventory Name -->
+
                 <div class="mb-4">
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="inventoryName">Tên kho *</label>
                     <input v-model="form.inventoryName"
@@ -17,7 +17,7 @@
                     <p class="lg:text-sm text-red-500">{{ errors.inventoryName }}</p>
                 </div>
 
-                <!-- City -->
+
                 <div class="mb-4">
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="city">Thành phố *</label>
                     <input v-model="form.city"
@@ -26,7 +26,6 @@
                     <p class="lg:text-sm text-red-500">{{ errors.city }}</p>
                 </div>
 
-                <!-- District -->
                 <div class="mb-4">
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="district">Quận/Huyện *</label>
                     <input v-model="form.district"
@@ -35,7 +34,7 @@
                     <p class="lg:text-sm text-red-500">{{ errors.district }}</p>
                 </div>
 
-                <!-- Commune -->
+
                 <div class="mb-4">
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="commune">Phường/Xã *</label>
                     <input v-model="form.commune"
@@ -44,7 +43,6 @@
                     <p class="lg:text-sm text-red-500">{{ errors.commune }}</p>
                 </div>
 
-                <!-- Latitude -->
                 <div class="mb-4">
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="latitude">Vĩ độ *</label>
                     <input v-model="form.latitude"
@@ -53,7 +51,7 @@
                     <p class="lg:text-sm text-red-500">{{ errors.latitude }}</p>
                 </div>
 
-                <!-- Longitude -->
+
                 <div class="mb-4">
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="longitude">Kinh độ *</label>
                     <input v-model="form.longitude"
@@ -62,7 +60,7 @@
                     <p class="lg:text-sm text-red-500">{{ errors.longitude }}</p>
                 </div>
 
-                <!-- Active Status -->
+
                 <div class="mb-4">
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="active">Hoạt động *</label>
                     <select v-model="form.active"
@@ -141,7 +139,7 @@ export default {
             this.$emit('close');
         },
         validateForm() {
-            // Reset errors
+
             this.errors = {};
 
             const schema = Yup.object().shape({
@@ -174,11 +172,11 @@ export default {
 
             schema.validate(this.form, { abortEarly: false })
                 .then(() => {
-                    // No validation errors, proceed with form submission
+
                     this.submitForm();
                 })
                 .catch(err => {
-                    // Populate errors
+
                     err.inner.forEach((validationError) => {
                         this.errors[validationError.path] = validationError.message;
                     });
@@ -186,8 +184,7 @@ export default {
         },
         async submitForm() {
             try {
-                const data = { ...this.form }; // Spread form data into object
-                console.log(data);  // Should correctly log the form data
+                const data = { ...this.form };
                 const res = await createInventory(data);
                 this.message = res.message;
                 this.messageType = 'success';
@@ -195,7 +192,7 @@ export default {
                 this.$emit('create-success');
 
             } catch (error) {
-            this.message = error.message;
+                this.message = error.message;
                 this.messageType = 'error';
                 this.NotificationModalIsOpen = true;
             }
@@ -205,7 +202,6 @@ export default {
 </script>
 
 <style scoped>
-/* Custom styles for removing borders except for the bottom */
 input {
     border: none;
     border-bottom: 2px solid #ddd;
@@ -214,6 +210,5 @@ input {
 input:focus {
     outline: none;
     border-bottom-color: #3b82f6;
-    /* Blue border on focus */
 }
 </style>

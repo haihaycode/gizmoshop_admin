@@ -1,7 +1,7 @@
 <template>
     <div v-if="isOpen" class="z-30 fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 ">
         <div
-            class="relative w-full max-w-screen-xl max-h-screen overflow-y-auto p-6 bg-white shadow-lg md:p-8 rounded-sm">
+            class="relative   w-full  max-w-screen-xl max-h-screen overflow-y-auto p-6 bg-white shadow-lg md:p-8 rounded-sm">
             <!-- Loading state -->
             <div v-if="loading" class="absolute inset-0 flex items-center justify-center bg-white bg-opacity-75">
                 <svg class="w-10 h-10 text-blue-600 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none"

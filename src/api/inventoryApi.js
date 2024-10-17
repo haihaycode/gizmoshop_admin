@@ -33,7 +33,7 @@ export const listInventory = async (inventoryName, active, page = 0, limit = 10,
     }
 };
 
-
+//  thay đổi trạng thái của kho
 export const changeActiveById = async (id) => {
     try {
         const response = await Axios.put(`${HOST}/api/public/inventory/changeactive/${id}`,);

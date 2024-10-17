@@ -45,9 +45,11 @@
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.extra_info }}</td>
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.roles }}</td>
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.updateAt }}</td>
-          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><i @click="handleChangeRole(item.id)"
-              class='bx bxs-edit-alt'></i>&nbsp;
-              <i @click="handleresetpass(item.id)" class='bx bxs-user'></i></td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+            <i @click="handleChangeRole(item.id)" class='bx bxs-edit-alt'></i>&nbsp;
+            <i @click="handleresetpass(item.id)" class='bx bxs-user'></i>&nbsp;
+            <i @click="updateStaffModal(item.id)" class='bx bxs-user-account'></i>
+          </td>
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
             <toggleButton :is-toggled="!item.deleted" @update:isToggled="updateDeleted(item.id)"></toggleButton>
           </td>
@@ -69,12 +71,13 @@
     <setRoleComponentVue v-if="idAccountSelected" :id="idAccountSelected" :isOpen="ModalUpdateIsOpen"
       :userRoles="roleUser" @close="handleChangeRole(null)" @loadingList="loadInventory">
     </setRoleComponentVue>
-
+    <updatestaff :isOpen="ModalUpdateStaffIsOpen" @close="updateStaffModal" :getInfo="info"></updatestaff>
   </div>
 </template>
 
 <script>
 import { listStaff, updateRoles, resertAccount } from '@/api/staffApi.js';
+import updatestaff from './updateStaff.vue';
 import TableComponent from '../table/TableComponent.vue';
 import toggleButton from '../buttons/toggleButton.vue';
 import Pagination from '../pagination/Pagination.vue';
@@ -94,10 +97,13 @@ export default {
     setRoleComponentVue,
     Pagination,
     filterRolesComponent,
+    updatestaff
 
   },
   data() {
     return {
+      ModalUpdateStaffIsOpen: false,
+      idStaffSelected: null,
       ModalUpdateIsOpen: false,
       idAccountSelected: null,
       roleUser: [],
@@ -148,7 +154,6 @@ export default {
         const response = await listStaff(keyword, undefined, role, this.page, this.limit, `${this.sortField},${this.sortDirection}`);
         this.pagination = response.data;
         this.staffList = response.data.content;
-        console.log(response);
       } catch (error) {
         console.error('Error loading staff list:', error);
       }
@@ -163,14 +168,14 @@ export default {
       }
       await this.loadInventory();
     },
-    async resetPass(accountId){
-          try {
-            await resertAccount(accountId)
-            notificationService.success("reset password thành công")         
-          } catch (error) {
-            notificationService.error("reset password thất bại")
-            console.log(error)
-          }
+    async resetPass(accountId) {
+      try {
+        await resertAccount(accountId)
+        notificationService.success("reset password thành công")
+      } catch (error) {
+        notificationService.error("reset password thất bại")
+        console.log(error)
+      }
     },
 
     getSortIcon(column) {
@@ -196,7 +201,7 @@ export default {
       this.idAccountSelected = accountId;
       this.roleUser = this.staffList.find(staff => staff.id === accountId)?.roles || [];
     },
-    handleresetpass(accountId){
+    handleresetpass(accountId) {
       this.resetPass(accountId)
     },
     async updateDeleted(id) {
@@ -206,6 +211,9 @@ export default {
       } catch (error) {
         console.log(error)
       }
+    },
+    updateStaffModal() {
+      this.ModalUpdateStaffIsOpen = !this.ModalUpdateStaffIsOpen;
     }
 
   }
