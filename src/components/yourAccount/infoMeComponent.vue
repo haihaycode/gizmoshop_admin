@@ -52,7 +52,7 @@
           </div>
           <div>
             <span class="font-semibold">Thông tin thêm</span>
-            <p>{{ infoAccount?.extra_info || 'No extra information provided' }}</p>
+            <p>{{ infoAccount?.extraInfo || 'No extra information provided' }}</p>
           </div>
         </div>
       </div>
@@ -92,7 +92,7 @@ export default {
         fullname: "Đang tải...",
         sdt: "Đang tải...",
         birthday: "Đang tải...",
-        extra_info: "Đang tải...",
+        extraInfo: "Đang tải...",
         roles: ["Đang tải..."],
         createAt: "Đang tải...",
         image: require("@/assets/image/3red.svg")

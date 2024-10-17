@@ -42,7 +42,7 @@
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.email }}</td>
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.sdt }}</td>
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.birthday }}</td>
-          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.extra_info }}</td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.extraInfo }}</td>
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.roles }}</td>
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.updateAt }}</td>
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
@@ -71,7 +71,7 @@
     <setRoleComponentVue v-if="idAccountSelected" :id="idAccountSelected" :isOpen="ModalUpdateIsOpen"
       :userRoles="roleUser" @close="handleChangeRole(null)" @loadingList="loadInventory">
     </setRoleComponentVue>
-    <updatestaff :isOpen="ModalUpdateStaffIsOpen" @close="updateStaffModal" :getInfo="info"></updatestaff>
+    <updatestaff v-if="idAccountSelected" :isOpen="ModalUpdateStaffIsOpen" @close="updateStaffModal" :getInfo="info" :accountId="idAccountSelected"></updatestaff>
   </div>
 </template>
 
@@ -103,7 +103,6 @@ export default {
   data() {
     return {
       ModalUpdateStaffIsOpen: false,
-      idStaffSelected: null,
       ModalUpdateIsOpen: false,
       idAccountSelected: null,
       roleUser: [],
@@ -212,8 +211,9 @@ export default {
         console.log(error)
       }
     },
-    updateStaffModal() {
+    updateStaffModal(accountId) {
       this.ModalUpdateStaffIsOpen = !this.ModalUpdateStaffIsOpen;
+      this.idAccountSelected = accountId;
     }
 
   }

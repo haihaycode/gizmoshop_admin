@@ -48,12 +48,19 @@ export const resertAccount = async (accountId) => {
 //  hàm để Quản trị viên cập nhật thông tin cho tài khoản với ID
 export const updateAccountWithID = async (accountId, userData) => {
     try {
-        const response = await Axios.patch(`/api/admin/account/${accountId}/updatae `, userData);
+        const response = await Axios.put(`/api/admin/account/${accountId}/update `, userData);
         return response.data;
     } catch (error) {
         throw new Error(`${error.message}`);
     }
 };
 
-// đang chờ hàm lấy thông tin account dựa vào id
-
+//hàm lấy thông tin account dựa vào id
+export const getAccountId = async (accountId) => {
+    try {
+        const response = await Axios.get(`/api/admin/account/${accountId}`);
+        return response.data;
+    } catch (error) {
+        throw new Error(`${error.message}`);
+    }
+};

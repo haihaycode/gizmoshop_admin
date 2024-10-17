@@ -8,7 +8,7 @@
 
                 <!-- <div class="mb-4">
                     <label class="block text-gray-700 text-sm font-bold mb-2">Email</label>
-                    <input disabled v-model="parentInfo.email" type="email"
+                    <input disabled v-model="userData.email" type="email"
                         class="w-full px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                         placeholder="Nhập email" />
                     <span class="text-red-500 text-sm" v-if="errors.email">{{ errors.email }}</span>
@@ -17,7 +17,7 @@
 
                 <div class="mb-4">
                     <label class="block text-gray-700 text-sm font-bold mb-2">Họ và tên</label>
-                    <input v-model="parentInfo.fullname" type="text"
+                    <input v-model="userData.fullname" type="text"
                         class="w-full px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                         placeholder="Nhập họ và tên" />
                     <span class="text-red-500 text-sm" v-if="errors.fullname">{{ errors.fullname }}</span>
@@ -26,7 +26,7 @@
 
                 <div class="mb-4">
                     <label class="block text-gray-700 text-sm font-bold mb-2">Số điện thoại</label>
-                    <input v-model="parentInfo.sdt" type="text"
+                    <input v-model="userData.sdt" type="text"
                         class="w-full px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                         placeholder="Nhập số điện thoại" />
                     <span class="text-red-500 text-sm" v-if="errors.sdt">{{ errors.sdt }}</span>
@@ -35,7 +35,7 @@
 
                 <div class="mb-4">
                     <label class="block text-gray-700 text-sm font-bold mb-2">Ngày sinh</label>
-                    <input v-model="parentInfo.birthday" type="date"
+                    <input v-model="userData.birthday" type="date"
                         class="w-full px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
                     <span class="text-red-500 text-sm" v-if="errors.birthday">{{ errors.birthday }}</span>
                 </div>
@@ -43,7 +43,7 @@
 
                 <!-- <div class="mb-4">
                     <label class="block text-gray-700 text-sm font-bold mb-2">Hình ảnh</label>
-                    <input v-model="parentInfo.image" type="text"
+                    <input v-model="userData.image" type="text"
                         class="w-full px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                         placeholder="URL hình ảnh" />
                     <span class="text-red-500 text-sm" v-if="errors.image">{{ errors.image }}</span>
@@ -52,7 +52,7 @@
 
                 <div class="mb-4">
                     <label class="block text-gray-700 text-sm font-bold mb-2">Thông tin thêm</label>
-                    <textarea v-model="parentInfo.extraInfo"
+                    <textarea v-model="userData.extraInfo"
                         class="w-full px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                         placeholder="Nhập thông tin thêm"></textarea>
                     <span class="text-red-500 text-sm" v-if="errors.extra_info">{{ errors.extra_info }}</span>
@@ -60,7 +60,7 @@
 
 
                 <div class="flex justify-end">
-                    <Button @click="updateMe" :isLoading="isLoading" :text="'Cập Nhật'"></Button>
+                    <Button  :isLoading="isLoading" :text="'Cập Nhật'"></Button>
                 </div>
             </form>
         </template>
@@ -83,13 +83,13 @@ export default {
             NotificationModalIsOpen: false,
             messageType: '',
             message: '',
-            parentInfo: {
+            userData: {
                 email: '',
                 fullname: '',
                 sdt: '',
                 birthday: '',
                 image: '',
-                extra_info: ''
+                extraInfo: ''
             },
             errors: {}
         };
@@ -131,7 +131,7 @@ export default {
                 //     .max(500, 'Thông tin thêm không được vượt quá 500 ký tự'),
             });
 
-            schema.validate(this.parentInfo, { abortEarly: false })
+            schema.validate(this.userData, { abortEarly: false })
                 .then(() => {
                     this.updateMe();
                 })
@@ -147,7 +147,7 @@ export default {
         async getInfoFromParent() {
             try {
                 const info = await this.getInfo();
-                this.parentInfo = info;
+                this.userData = info;
             } catch (error) {
                 console.error(error);
             }
@@ -155,10 +155,10 @@ export default {
         async updateMe() {
             try {
                 const dataMe = {
-                    fullname: this.parentInfo.fullname,
-                    sdt: this.parentInfo.sdt,
-                    birthday: this.parentInfo.birthday,
-                    extraInfo: this.parentInfo.extra_info,
+                    fullname: this.userData.fullname,
+                    sdt: this.userData.sdt,
+                    birthday: this.userData.birthday,
+                    extraInfo: this.userData.extraInfo,
                 }
                 await updateMe(dataMe)
                 this.message = "Cập nhật thành công";
