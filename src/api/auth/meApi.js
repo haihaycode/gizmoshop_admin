@@ -34,13 +34,18 @@ export const verifyEmail = async (verifyEmail) => {
     }
 };
 
-// update account đang đăng nhập
-export const updateMe = async (userData) => {
+
+
+export const updateMe = async (formData) => {
     try {
-        const response = await Axios.put(`${HOST}/api/public/account/update`, userData);
+        // Gửi FormData qua Axios
+        const response = await Axios.put(
+            `${HOST}/api/public/account/update`,
+            formData, // Không cần thiết lập 'Content-Type', Axios sẽ tự động xử lý
+        );
         return response.data;
     } catch (error) {
-        throw new Error(`${error}`);
+        throw new Error(error.response?.data?.message || error.message);
     }
 };
 

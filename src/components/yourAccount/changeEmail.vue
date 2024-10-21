@@ -1,9 +1,9 @@
 <template>
     <ModalBox :isOpen="isOpen" :loading="isLoading" :closeModal="closeModal" :closeText="'Đóng'">
         <template #header>
-            <h3 class="sm:text-sm md:text-lg font-bold">
+            <div class="sm:text-sm md:text-lg font-bold">
                 <h3 class="sm:text-sm md:text-lg font-bold">Cập nhật Email</h3>
-            </h3>
+            </div>
         </template>
         <template #body>
             <form class="max-w-md mx-auto p-6">

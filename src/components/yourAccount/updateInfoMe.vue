@@ -60,7 +60,7 @@
 
 
                 <div class="flex justify-end">
-                    <Button  :isLoading="isLoading" :text="'Cập Nhật'"></Button>
+                    <Button :isLoading="isLoading" :text="'Cập Nhật'"></Button>
                 </div>
             </form>
         </template>
@@ -75,7 +75,7 @@ import * as Yup from 'yup';
 import Button from '../buttons/button.vue';
 import { updateMe } from '@/api/auth/meApi'
 import NotificationModal from '../modal/NotificationModal.vue';
-
+import { mapGetters } from 'vuex';
 export default {
     name: 'updateInfoMeComponent',
     data() {
@@ -93,6 +93,9 @@ export default {
             },
             errors: {}
         };
+    },
+    computed: {
+        ...mapGetters('loading', ['isLoading']),
     },
     components: {
         ModalBox,
@@ -159,18 +162,22 @@ export default {
                     sdt: this.userData.sdt,
                     birthday: this.userData.birthday,
                     extraInfo: this.userData.extraInfo,
-                }
-                await updateMe(dataMe)
+                };
+                const formData = new FormData();
+                formData.append('accountRequest', new Blob([JSON.stringify(dataMe)], { type: 'application/json' }));
+                await updateMe(formData);
                 this.message = "Cập nhật thành công";
                 this.messageType = 'success';
                 this.NotificationModalIsOpen = true;
                 this.$emit('update-success');
             } catch (error) {
+                // Xử lý lỗi
                 this.message = error.message;
                 this.messageType = 'error';
                 this.NotificationModalIsOpen = true;
             }
         }
+
     }
 };
 </script>

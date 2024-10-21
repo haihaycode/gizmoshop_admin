@@ -11,7 +11,8 @@
             </button>
         </div>
 
-        <AddNewInventory :isOpen="AddNewInventoryIsModalOpen" @close="triggerModalAddNewInventory"  @create-success="loadInventory" ></AddNewInventory>
+        <AddNewInventory :isOpen="AddNewInventoryIsModalOpen" @close="triggerModalAddNewInventory"
+            @create-success="loadInventory"></AddNewInventory>
 
 
         <!-- list -->
@@ -40,8 +41,8 @@ export default {
             this.AddNewInventoryIsModalOpen = !this.AddNewInventoryIsModalOpen;
         },
         async loadInventory() {
-        await this.$refs.tableInventory.loadInventory(); 
-    }
+            await this.$refs.tableInventory.loadInventory();
+        }
     }
 };
 </script>
