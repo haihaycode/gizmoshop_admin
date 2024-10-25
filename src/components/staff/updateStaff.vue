@@ -55,6 +55,7 @@ import { getAccountId, updateAccountWithID } from '@/api/staffApi';
 import * as Yup from 'yup';
 import Button from '../buttons/button.vue';
 import NotificationModal from '../modal/NotificationModal.vue';
+import { mapGetters } from 'vuex';
 
 export default {
     name: 'updateStaff',
@@ -75,6 +76,9 @@ export default {
             required: true,
         }
 
+    },
+    computed: {
+        ...mapGetters('loading', ['isLoading'])
     },
     components: {
         ModalBox,

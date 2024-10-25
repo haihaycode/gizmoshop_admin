@@ -14,7 +14,7 @@
             <ul class="mt-28 md:mt-4 lg:mt-4 ">
                 <span class="text-white font-bold">QUẢN LÝ CHUNG</span>
                 <li class="mb-1 group">
-                    <router-link :to="{name: 'me'}"
+                    <router-link :to="{ name: 'me' }"
                         class="flex font-semibold items-center py-2 px-4 text-white hover:bg-gray-100 hover:bg-opacity-5 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100 sidebar-dropdown-toggle">
                         <i class='bx bx-user mr-3 text-lg'></i>
                         <span class="text-sm">Thông tin cá nhân</span>
@@ -30,9 +30,9 @@
                 </li>
                 <span class="text-white font-bold">NHÂN VIÊN</span>
                 <li class="mb-1 group">
-                    <RouterLink :to="{ name: 'staff'}"
+                    <RouterLink :to="{ name: 'staff' }"
                         class="flex font-semibold items-center py-2 px-4 text-white hover:bg-gray-100 hover:bg-opacity-5 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100 sidebar-dropdown-toggle">
-                        <i class='bx bxl-blogger mr-3 text-lg'></i>
+                        <i class='bx bxs-user-account mr-3 text-lg'></i>
                         <span class="text-sm">Danh sách</span>
                         <i class="ri-arrow-right-s-line ml-auto group-[.selected]:rotate-90"></i>
                     </RouterLink>
@@ -55,7 +55,7 @@
                 <li class="mb-1 group">
                     <RouterLink :to="{ name: 'inventory' }"
                         class="flex font-semibold items-center py-2 px-4 text-white hover:bg-gray-100 hover:bg-opacity-5 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100">
-                        <i class='bx bx-bell mr-3 text-lg'></i>
+                        <i class='bx bxs-school mr-3 text-lg'></i>
                         <span class="text-sm">Danh sách kho</span>
                         <span
                             class="md:block px-2 py-0.5 ml-auto text-xs font-medium tracking-wide text-red-600 bg-red-200 rounded-full">5</span>

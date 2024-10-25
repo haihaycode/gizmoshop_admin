@@ -46,9 +46,9 @@
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.roles }}</td>
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.updateAt }}</td>
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-            <i @click="handleChangeRole(item.id)" class='bx bxs-edit-alt'></i>&nbsp;
-            <i @click="handleresetpass(item.id)" class='bx bxs-user'></i>&nbsp;
-            <i @click="updateStaffModal(item.id)" class='bx bxs-user-account'></i>
+            <i @click="handleChangeRole(item.id)" class='bx bxl-android'></i>&nbsp;
+            <i @click="handleresetpass(item.id)" class='bx bx-reset'></i>&nbsp;
+            <i @click="updateStaffModal(item.id)" class='bx bxs-edit'></i>
           </td>
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
             <toggleButton :is-toggled="!item.deleted" @update:isToggled="updateDeleted(item.id)"></toggleButton>
@@ -71,7 +71,8 @@
     <setRoleComponentVue v-if="idAccountSelected" :id="idAccountSelected" :isOpen="ModalUpdateIsOpen"
       :userRoles="roleUser" @close="handleChangeRole(null)" @loadingList="loadInventory">
     </setRoleComponentVue>
-    <updatestaff v-if="idAccountSelected" :isOpen="ModalUpdateStaffIsOpen" @close="updateStaffModal" :getInfo="info" :accountId="idAccountSelected"></updatestaff>
+    <updatestaff v-if="idAccountSelected" :isOpen="ModalUpdateStaffIsOpen" @close="updateStaffModal" :getInfo="info"
+      :accountId="idAccountSelected"></updatestaff>
   </div>
 </template>
 
@@ -84,9 +85,7 @@ import Pagination from '../pagination/Pagination.vue';
 import filterRolesComponent from './filterRolesComponent.vue';
 import notificationService from '@/services/notificationService';
 import dayjs from "dayjs";
-
-
-
+import { mapGetters } from 'vuex';
 import setRoleComponentVue from './setRoleComponent.vue';
 
 export default {
@@ -114,7 +113,9 @@ export default {
       page: 0
     };
   },
+
   computed: {
+    ...mapGetters('loading', ['isLoading']),
     formattedStaffList() {
       return this.staffList.map(item => {
         let roles = item.roles;
