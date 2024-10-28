@@ -10,6 +10,7 @@
   "dependencies": {
     "axios": "^1.7.7",
     "boxicons": "^2.1.4",
+    "chart.js": "^4.4.6",
     "core-js": "^3.8.3",
     "dayjs": "^1.11.13",
     "js-cookie": "^3.0.5",

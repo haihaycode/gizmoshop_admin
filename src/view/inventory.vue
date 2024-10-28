@@ -17,6 +17,7 @@
 
         <!-- list -->
         <TableInventory ref="tableInventory"></TableInventory>
+        <chartInventory></chartInventory>
     </div>
 </template>
 
@@ -24,12 +25,14 @@
 import StatisticsCardsInventory from '@/components/inventory/StatisticsCardsInventory.vue';
 import TableInventory from '@/components/inventory/TableInventory.vue';
 import AddNewInventory from '@/components/inventory/AddNewInventory.vue';
+import chartInventory from '@/components/inventory/chartInventory.vue';
 export default {
     name: 'InventoryView',
     components: {
         AddNewInventory,
         TableInventory,
-        StatisticsCardsInventory
+        StatisticsCardsInventory,
+        chartInventory
     },
     data() {
         return {

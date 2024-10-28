@@ -62,3 +62,12 @@ export const updateInventory = async (id, inventoryObject) => {
         throw new Error(`${error}`);
     }
 };
+
+export const fetchChartInventory = async () => {
+    try {
+        const response = await Axios.get(`${HOST}/api/public/inventory/InventoryStats`);
+        return response.data;
+    } catch (error) {
+        throw new Error(`${error}`);
+    }
+};
