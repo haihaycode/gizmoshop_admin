@@ -39,7 +39,8 @@
                 </ul> -->
                 <TableComponent>
                     <template #header>
-                        <th class=" px-6 py-3 text-left text-xs font-medium text-gray-50 uppercase tracking-wider">ID sản phẩm
+                        <th class=" px-6 py-3 text-left text-xs font-medium text-gray-50 uppercase tracking-wider">ID
+                            sản phẩm
                         </th>
                         <th class=" px-6 py-3 text-left text-xs font-medium text-gray-50 uppercase tracking-wider">TÊN
                             SẢN PHẨM
@@ -134,6 +135,7 @@ export default {
 
         const createChart = () => {
             const ctx = barChart.value.getContext('2d');
+            const maxYValue = Math.max(...paginatedData.value.map(item => item.productInventory.length)) + 5;
             myChart = new Chart(ctx, {
                 type: 'bar',
                 data: {
@@ -161,6 +163,7 @@ export default {
                     scales: {
                         y: {
                             beginAtZero: true,
+                            max: maxYValue,
                             title: {
                                 display: true,
                                 text: 'Số lượng kho',
