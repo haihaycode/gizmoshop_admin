@@ -40,7 +40,7 @@
 
 
                 <div class="flex justify-end">
-                    <Button :isLoading="isLoading" :text="'Cập Nhật'"></Button>
+                    <Button :text="'Cập Nhật'"></Button>
                 </div>
             </form>
         </template>
@@ -113,6 +113,7 @@ export default {
             schema.validate(this.dataAccount, { abortEarly: false })
                 .then(() => {
                     this.updateInfoAccount();
+
                 })
                 .catch(err => {
                     err.inner.forEach((validationError) => {
