@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-col items-center bg-white shadow-lg rounded-lg p-6">
+    <div class="flex flex-col items-center bg-white shadow-sm rounded-lg p-6 mt-1">
         <h2 class="text-xl font-bold mb-4 text-gray-800">Thống kê số lượng sản phẩm từng danh mục</h2>
 
         <div v-if="loading" class="flex justify-center items-center h-60 w-full">
@@ -39,7 +39,8 @@
                 </ul> -->
                 <TableComponent>
                     <template #header>
-                        <th class=" px-6 py-3 text-left text-xs font-medium text-gray-50 uppercase tracking-wider">ID sản phẩm
+                        <th class=" px-6 py-3 text-left text-xs font-medium text-gray-50 uppercase tracking-wider">ID
+                            sản phẩm
                         </th>
                         <th class=" px-6 py-3 text-left text-xs font-medium text-gray-50 uppercase tracking-wider">TÊN
                             SẢN PHẨM

@@ -20,7 +20,9 @@
     "vee-validate": "^4.13.2",
     "vue": "^3.2.13",
     "vue-router": "^4.0.13",
+    "vue-toastification": "^2.0.0-rc.5",
     "vuex": "^4.0.2",
+    "xlsx": "^0.18.5",
     "yup": "^1.4.0"
   },
   "devDependencies": {

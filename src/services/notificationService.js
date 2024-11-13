@@ -1,68 +1,39 @@
 // services/notificationService.js
-import { Notyf } from 'notyf';
-import 'notyf/notyf.min.css';  // Import CSS cho thông báo
+import Toast, { useToast } from 'vue-toastification';
+import 'vue-toastification/dist/index.css';
 
+const options = {
+    position: "top-right",
+    timeout: 2000,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    draggablePercent: 0.6,
+    showCloseButtonOnHover: false,
+    hideProgressBar: false,
+    closeButton: "button",
+    icon: true
+};
 
-const notyf = new Notyf({
-    duration: 3000, // Thời gian hiển thị thông báo (ms)
-    position: {
-        x: 'right',
-        y: 'top',
-    },
-    types: [
-        {
-            type: 'success',
-            background: 'green',
-            icon: {
-                className: 'fas fa-check-circle',
-                tagName: 'i',
-                text: ''
-            }
-        },
-        {
-            type: 'error',
-            background: 'red',
-            icon: {
-                className: 'fas fa-bug',
-                tagName: 'i',
-                text: ''
-            }
-        }
-    ]
-});
+// Hàm khởi tạo vue-toastification, 
+//sử dụng khi khởi tạo ứng dụng trong main.js
+export function initializeToast(app) {
+    app.use(Toast, options);
+}
+
+const toast = useToast();
 
 export default {
-    success(message) {
-        notyf.success(message || 'Thành công!');
+    success(message = 'Thành công!') {
+        toast.success(message);
     },
-
-    error(message) {
-        notyf.error(message || 'Có lỗi xảy ra!');
+    error(message = 'Có lỗi xảy ra!') {
+        toast.error(message);
     },
-
-    info(message) {
-        notyf.open({
-            type: 'info',
-            message: message || 'Thông tin!',
-            background: '#3b82f6', // màu xanh dương
-            icon: {
-                className: 'fas fa-info-circle',
-                tagName: 'i',
-                text: ''
-            }
-        });
+    info(message = 'Thông tin!') {
+        toast.info(message);
     },
-
-    warning(message) {
-        notyf.open({
-            type: 'warning',
-            message: message || 'Cảnh báo!',
-            background: '#f59e0b', // màu vàng
-            icon: {
-                className: 'fas fa-exclamation-triangle',
-                tagName: 'i',
-                text: ''
-            }
-        });
+    warning(message = 'Cảnh báo!') {
+        toast.warning(message);
     }
 };

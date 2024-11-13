@@ -57,8 +57,7 @@
                         class="flex font-semibold items-center py-2 px-4 text-white hover:bg-gray-100 hover:bg-opacity-5 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100">
                         <i class='bx bxs-school mr-3 text-lg'></i>
                         <span class="text-sm">Danh sách kho</span>
-                        <span
-                            class="md:block px-2 py-0.5 ml-auto text-xs font-medium tracking-wide text-red-600 bg-red-200 rounded-full">5</span>
+
                     </RouterLink>
                 </li>
                 <li class="mb-1 group">
