@@ -1,9 +1,10 @@
 <template>
-  <div class="flex justify-between items-center overflow-x-auto">
+  <div class="flex justify-between items-center overflow-x-auto bg-white p-2">
     <div>
       <!-- Select option to change items per page -->
       <select v-model="localItemsPerPage" @change="updateLimit" class="px-2 py-1 ">
-        <option class="bg-opacity-0" v-for="option in limitOptions" :key="option" :value="option">{{ option }} mục</option>
+        <option class="bg-opacity-0" v-for="option in limitOptions" :key="option" :value="option">{{ option }} mục
+        </option>
       </select>
     </div>
 
@@ -21,7 +22,7 @@
       <span v-if="currentPage > 3" class="mx-1">...</span>
 
       <button v-for="page in pagesToShow" :key="page" @click="goToPage(page)" :class="{
-        'bg-blue-500 text-white border border-blue-700': currentPage === page,
+        'bg-[#ffa500] text-white border border-[#ffa500]': currentPage === page,
         'bg-gray-200 hover:bg-gray-300 transition-colors duration-200': currentPage !== page
       }" class="mx-1 px-3 py-1 rounded-md">
         {{ page }}

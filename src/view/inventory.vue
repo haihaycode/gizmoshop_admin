@@ -17,6 +17,8 @@
 
         <!-- list -->
         <TableInventory ref="tableInventory"></TableInventory>
+        <!-- import and export excel -->
+        <ImportAndExportForInventoryComponent />
         <chartInventory></chartInventory>
     </div>
 </template>
@@ -26,13 +28,15 @@ import StatisticsCardsInventory from '@/components/inventory/StatisticsCardsInve
 import TableInventory from '@/components/inventory/TableInventory.vue';
 import AddNewInventory from '@/components/inventory/AddNewInventory.vue';
 import chartInventory from '@/components/inventory/chartInventory.vue';
+import ImportAndExportForInventoryComponent from '@/components/inventory/ImportAndExportForInventoryComponent.vue';
 export default {
     name: 'InventoryView',
     components: {
         AddNewInventory,
         TableInventory,
         StatisticsCardsInventory,
-        chartInventory
+        chartInventory,
+        ImportAndExportForInventoryComponent
     },
     data() {
         return {
