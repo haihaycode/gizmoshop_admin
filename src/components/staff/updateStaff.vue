@@ -61,6 +61,8 @@ export default {
     name: 'updateStaff',
     data() {
         return {
+            messageType: '',
+            message: '',
             NotificationModalIsOpen: false,
             dataAccount: {},
             errors: {}
@@ -72,11 +74,12 @@ export default {
             default: null,
         },
         accountId: {
-            type: String,
+            type: Number,
             required: true,
         }
 
     },
+    emits: ['close', 'updateSuccess'],
     computed: {
         ...mapGetters('loading', ['isLoading'])
     },

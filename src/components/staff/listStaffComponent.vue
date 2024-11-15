@@ -92,10 +92,10 @@
     </ModalBox>
 
     <setRoleComponentVue v-if="idAccountSelected" :id="idAccountSelected" :isOpen="ModalUpdateIsOpen"
-      :userRoles="roleUser" @close="handleChangeRole(null)" @loadingList="loadInventory">
+      :userRoles="roleUser" @close="handleChangeRole" @loadingList="loadInventory">
     </setRoleComponentVue>
     <updatestaff v-if="idAccountSelected" :isOpen="ModalUpdateStaffIsOpen" @close="updateStaffModal"
-      @update-success="loadInventory" :getInfo="info" :accountId="idAccountSelected"></updatestaff>
+      @update-success="loadInventory" :accountId="idAccountSelected"></updatestaff>
   </div>
 </template>
 
@@ -194,9 +194,9 @@ export default {
       }
       await this.loadInventory();
     },
-    async resetPass(accountId) {
+    async resetPass() {
       try {
-        await resertAccount(accountId)
+        await resertAccount(this.idAccountSelected)
         notificationService.success("reset password thành công")
       } catch (error) {
         notificationService.error("reset password thất bại")
@@ -227,8 +227,8 @@ export default {
       this.ModalSettingIsOpen = !this.ModalSettingIsOpen;
     },
     handleChangeRole() {
-      this.ModalUpdateIsOpen = !this.ModalUpdateIsOpen;
       this.roleUser = this.staffList.find(staff => staff.id === this.idAccountSelected)?.roles || [];
+      this.ModalUpdateIsOpen = !this.ModalUpdateIsOpen;
     },
     handleresetpass() {
       this.resetPass(this.idAccountSelected)
@@ -241,9 +241,8 @@ export default {
         console.log(error)
       }
     },
-    updateStaffModal(accountId) {
+    updateStaffModal() {
       this.ModalUpdateStaffIsOpen = !this.ModalUpdateStaffIsOpen;
-      this.idAccountSelected = accountId;
     }
 
   }
