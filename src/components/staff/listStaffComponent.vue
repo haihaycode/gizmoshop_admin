@@ -28,7 +28,7 @@
         <th @click="changeSort('updateDate')"
           class="px-6 py-3 text-left text-xs font-medium text-gray-50 uppercase tracking-wider">Cập nhật lần cuối<span
             v-html="getSortIcon('updateDate')"></span></th>
-        <th class="px-6 py-3 text-left text-xs font-medium text-gray-50 uppercase tracking-wider">Cập nhật quyền</th>
+        <th class="px-6 py-3 text-left text-xs font-medium text-gray-50 uppercase tracking-wider">Công cụ</th>
         <th @click="changeSort('deleted')"
           class="px-6 py-3 text-left text-xs font-medium text-gray-50 uppercase tracking-wider">Trạng thái <span
             v-html="getSortIcon('deleted')"></span></th>
@@ -46,9 +46,7 @@
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.roles }}</td>
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.updateAt }}</td>
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-            <i @click="handleChangeRole(item.id)" class='bx bxl-android text-xl'></i>&nbsp;
-            <i @click="handleresetpass(item.id)" class='bx bx-reset text-xl'></i>&nbsp;
-            <i @click="updateStaffModal(item.id)" class='bx bxs-edit text-xl'></i>
+            <i @click="handleModalSetting(item.id)" class='bx bx-cog text-xl'></i>
           </td>
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
             <toggleButton :is-toggled="!item.deleted" @update:isToggled="updateDeleted(item.id)"></toggleButton>
@@ -68,11 +66,36 @@
       </template>
     </TableComponent>
 
+    <ModalBox :isOpen="ModalSettingIsOpen" :closeModal="handleModalSetting">
+      <template #header>
+        <h2 class="text-2xl font-bold mb-4">Các công cụ chỉnh sửa và cập nhật</h2>
+      </template>
+      <template #body>
+        <div class="space-y-4">
+          <div @click="handleChangeRole" class="flex items-center space-x-2 hover:bg-gray-100 p-2 rounded">
+            <i class="bx bxl-android text-xl text-blue-500 cursor-pointer"></i>
+            <span class="text-sm font-medium text-gray-700 cursor-pointer">Cập nhật quyền cho tài khoản</span>
+          </div>
+
+          <div @click="handleresetpass" class="flex items-center space-x-2 hover:bg-gray-100 p-2 rounded">
+            <i class="bx bx-reset text-xl text-red-500 cursor-pointer"></i>
+            <span class="text-sm font-medium text-gray-700 cursor-pointer">Đặt lại mật khẩu cho tài khoản</span>
+          </div>
+
+          <div @click="updateStaffModal" class="flex items-center space-x-2 hover:bg-gray-100 p-2 rounded">
+            <i class="bx bxs-edit text-xl text-green-500 cursor-pointer"></i>
+            <span class="text-sm font-medium text-gray-700 cursor-pointer">Cập nhật thông tin cho tài khoản</span>
+          </div>
+        </div>
+      </template>
+
+    </ModalBox>
+
     <setRoleComponentVue v-if="idAccountSelected" :id="idAccountSelected" :isOpen="ModalUpdateIsOpen"
       :userRoles="roleUser" @close="handleChangeRole(null)" @loadingList="loadInventory">
     </setRoleComponentVue>
-    <updatestaff v-if="idAccountSelected" :isOpen="ModalUpdateStaffIsOpen" @close="updateStaffModal" @update-success="loadInventory" :getInfo="info"
-      :accountId="idAccountSelected"></updatestaff>
+    <updatestaff v-if="idAccountSelected" :isOpen="ModalUpdateStaffIsOpen" @close="updateStaffModal"
+      @update-success="loadInventory" :getInfo="info" :accountId="idAccountSelected"></updatestaff>
   </div>
 </template>
 
@@ -87,6 +110,7 @@ import notificationService from '@/services/notificationService';
 import dayjs from "dayjs";
 import { mapGetters } from 'vuex';
 import setRoleComponentVue from './setRoleComponent.vue';
+import ModalBox from '../modal/ModalBox.vue';
 
 export default {
   name: 'listStaffComponent',
@@ -96,11 +120,13 @@ export default {
     setRoleComponentVue,
     Pagination,
     filterRolesComponent,
-    updatestaff
+    updatestaff,
+    ModalBox
 
   },
   data() {
     return {
+      ModalSettingIsOpen: false,
       ModalUpdateStaffIsOpen: false,
       ModalUpdateIsOpen: false,
       idAccountSelected: null,
@@ -196,13 +222,16 @@ export default {
       this.page = 0;
       this.loadInventory();
     },
-    handleChangeRole(accountId) {
-      this.ModalUpdateIsOpen = !this.ModalUpdateIsOpen;
+    handleModalSetting(accountId) {
       this.idAccountSelected = accountId;
-      this.roleUser = this.staffList.find(staff => staff.id === accountId)?.roles || [];
+      this.ModalSettingIsOpen = !this.ModalSettingIsOpen;
     },
-    handleresetpass(accountId) {
-      this.resetPass(accountId)
+    handleChangeRole() {
+      this.ModalUpdateIsOpen = !this.ModalUpdateIsOpen;
+      this.roleUser = this.staffList.find(staff => staff.id === this.idAccountSelected)?.roles || [];
+    },
+    handleresetpass() {
+      this.resetPass(this.idAccountSelected)
     },
     async updateDeleted(id) {
       try {
