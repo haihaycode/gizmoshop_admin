@@ -1,12 +1,8 @@
 <template>
-    <div
-        class="p-2 bg-gray-200 bg-opacity-30 flex flex-col lg:flex-row lg:items-center justify-between shadow-md shadow-black/5 sticky top-0 left-0  lg:m-2 md:m-0">
-        <h1 class="text-lg font-semibold mb-4 lg:mb-0 lg:text-xl">Dashboard - GizmoShop</h1>
-        <div class="space-y-2 text-sm lg:text-base">
-            <p><strong>Token:</strong> <span class="break-all">{{ token }}</span></p>
-            <p><strong>Refresh Token:</strong> <span class="break-all">{{ refreshToken }}</span></p>
-            <p><strong>Email:</strong> {{ email }}</p>
-            <p><strong>Role:</strong> {{ role }}</p>
+    <div class="p-2 bg-gray-200 bg-opacity-30  sticky top-0 left-0  lg:m-2 md:m-0">
+        <div class="flex justify-center items-center">
+            <img src="https://agilearn.vn/wp-content/uploads/2021/02/ban-hang-chuyen-nghiep-02-1.png" class=" h-[500px]"
+                alt="">
         </div>
     </div>
 </template>
