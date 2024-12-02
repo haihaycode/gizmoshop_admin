@@ -74,7 +74,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters("loading", ["isLoading"]), // Lấy giá trị isLoading từ Vuex
+    ...mapGetters("loading", ["isLoading"]),
   },
   components: {
     Form,
@@ -83,14 +83,14 @@ export default {
     NotificationModal,
   },
   methods: {
-    ...mapActions("auth", ["setToken", "setRefreshToken"]), // Map actions để lưu token và refreshToken
+    ...mapActions("auth", ["setToken", "setRefreshToken"]),
     async handleLogin(values) {
       try {
         const loginData = {
           email: values.email,
           password: values.password,
         };
-        const response = await loginApi(loginData); //call api login
+        const response = await loginApi(loginData);
         const isAdmin = handleAuthentication(
           response.data.accessToken,
           response.data.refreshToken
