@@ -1,6 +1,6 @@
 <template>
   <div>
-    <filterRolesComponent @search="loadInventory"></filterRolesComponent>
+    <filterRolesComponent @search="getListAllAccount"></filterRolesComponent>
     <TableComponent>
       <!-- Header Slot -->
       <template #header>
@@ -92,10 +92,10 @@
     </ModalBox>
 
     <setRoleComponentVue v-if="idAccountSelected" :id="idAccountSelected" :isOpen="ModalUpdateIsOpen"
-      :userRoles="roleUser" @close="handleChangeRole" @loadingList="loadInventory">
+      :userRoles="roleUser" @close="handleChangeRole" @loadingList="getListAllAccount">
     </setRoleComponentVue>
     <updatestaff v-if="idAccountSelected" :isOpen="ModalUpdateStaffIsOpen" @close="updateStaffModal"
-      @update-success="loadInventory" :accountId="idAccountSelected"></updatestaff>
+      @update-success="getListAllAccount" :accountId="idAccountSelected"></updatestaff>
   </div>
 </template>
 
@@ -172,10 +172,10 @@ export default {
   },
 
   mounted() {
-    this.loadInventory();
+    this.getListAllAccount();
   },
   methods: {
-    async loadInventory(keyword, role) {
+    async getListAllAccount(keyword, role) {
       try {
         const response = await listStaff(keyword, undefined, role, this.page, this.limit, `${this.sortField},${this.sortDirection}`);
         this.pagination = response.data;
@@ -192,7 +192,7 @@ export default {
         this.sortField = column;
         this.sortDirection = 'asc';
       }
-      await this.loadInventory();
+      await this.getListAllAccount();
     },
     async resetPass() {
       try {
@@ -215,12 +215,12 @@ export default {
 
     handlePageChange(newPage) {
       this.page = newPage - 1;
-      this.loadInventory();
+      this.getListAllAccount();
     },
     handleLimitChange(limitPanigation) {
       this.limit = limitPanigation;
       this.page = 0;
-      this.loadInventory();
+      this.getListAllAccount();
     },
     handleModalSetting(accountId) {
       this.idAccountSelected = accountId;
@@ -236,7 +236,7 @@ export default {
     async updateDeleted(id) {
       try {
         await updateRoles(id);
-        this.loadInventory();
+        this.getListAllAccount();
       } catch (error) {
         console.log(error)
       }
