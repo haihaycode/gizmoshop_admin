@@ -1,15 +1,14 @@
 /* CSS tùy chỉnh cho thanh cuộn */
-.custom-scrollbar::-webkit-scrollbar {
-    width: 0; /* Độ rộng của thanh cuộn */
-  }
-  
-  .custom-scrollbar::-webkit-scrollbar-thumb {
-    background-color: #404e68; /* Màu của thanh cuộn */
-    border-radius: 10px; /* Góc bo tròn của thanh cuộn */
-  }
-  
-  .custom-scrollbar::-webkit-scrollbar-track {
-    background-color: #e5e7eb; /* Màu nền của track thanh cuộn */
-    border-radius: 10px;
-  }
-  
+/* CSS tùy chỉnh cho thanh cuộn */
+::-webkit-scrollbar {
+  width: 0; /* Độ rộng của thanh cuộn */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #404e68; /* Màu của thanh cuộn */
+  border-radius: 10px; /* Góc bo tròn của thanh cuộn */
+}
+::-webkit-scrollbar-track {
+  background-color: #e5e7eb; /* Màu nền của track thanh cuộn */
+  border-radius: 10px;
+}

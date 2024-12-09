@@ -1,6 +1,9 @@
 <template>
   <div class="">
-    <div class="min-h-screen flex items-center justify-center bg-gray-100">
+    <div class="min-h-screen flex items-center justify-center bg-gray-100" style="
+    background-position: 100%;
+    background-image: url(https://pittcc.edu/wp-content/uploads/2023/04/Office-Administration-Background.jpg);
+">
       <div class="bg-white p-8 rounded-lg md:shadow-md sm:shadow-none md:w-full max-w-md">
         <h2 class="text-2xl font-bold text-center mb-6">
           Quản Trị Viên <span class="text-blue-500">GizmoShop</span>
@@ -74,7 +77,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters("loading", ["isLoading"]), // Lấy giá trị isLoading từ Vuex
+    ...mapGetters("loading", ["isLoading"]),
   },
   components: {
     Form,
@@ -83,14 +86,14 @@ export default {
     NotificationModal,
   },
   methods: {
-    ...mapActions("auth", ["setToken", "setRefreshToken"]), // Map actions để lưu token và refreshToken
+    ...mapActions("auth", ["setToken", "setRefreshToken"]),
     async handleLogin(values) {
       try {
         const loginData = {
           email: values.email,
           password: values.password,
         };
-        const response = await loginApi(loginData); //call api login
+        const response = await loginApi(loginData);
         const isAdmin = handleAuthentication(
           response.data.accessToken,
           response.data.refreshToken

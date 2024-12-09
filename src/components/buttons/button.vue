@@ -1,7 +1,7 @@
 <template>
   <button :class="buttonClasses" :disabled="isDisabled">
     <span v-if="isLoading" class="loader mr-2"></span>
-    <span class="lg:text-sm">{{ isLoading ? 'Đang tải ' : text }}</span>
+    <span class="lg:text-sm"><span v-html="icon"></span>{{ isLoading ? 'Đang tải ' : text }}</span>
   </button>
 </template>
 
@@ -16,6 +16,10 @@ export default {
     color: {
       type: String,
       default: 'bg-blue-500', // Màu nút thường
+    },
+    icon: {
+      type: String,
+      default: '',
     },
     disabledColor: {
       type: String,

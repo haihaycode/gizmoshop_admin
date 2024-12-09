@@ -1,6 +1,6 @@
 <template>
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-2">
-        <!-- Card 1: Total Warehouses -->
+
         <div class="p-4 bg-white bg-opacity-70 rounded-sm shadow-md flex flex-col justify-between hover:bg-gray-300">
             <div class="flex justify-between items-center">
                 <i class="bx bx-home text-2xl text-yellow-500"></i>
@@ -13,7 +13,7 @@
             </div>
         </div>
 
-        <!-- Card 2: Active Warehouses -->
+
         <div class="p-4 bg-white bg-opacity-70 rounded-sm shadow-md flex flex-col justify-between hover:bg-gray-300">
             <div class="flex justify-between items-center">
                 <i class="bx bx-check-circle text-2xl text-green-500"></i>
@@ -26,7 +26,6 @@
             </div>
         </div>
 
-        <!-- Card 3: Inactive Warehouses -->
         <div class="p-4 bg-white bg-opacity-70 rounded-sm shadow-md flex flex-col justify-between hover:bg-gray-300">
             <div class="flex justify-between items-center">
                 <i class="bx bx-x-circle text-2xl text-red-500"></i>

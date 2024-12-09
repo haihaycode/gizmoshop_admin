@@ -90,9 +90,8 @@ export default {
         },
         async getRoles() {
             try {
-                // Giả định bạn đang sử dụng Axios để lấy dữ liệu từ API
                 const response = await getAllRoles();
-                this.roles = response.data; // Gán dữ liệu vai trò vào mảng roles
+                this.roles = response.data;
             } catch (error) {
                 console.error("Error fetching roles:", error);
             }
@@ -100,7 +99,6 @@ export default {
         async handleSubmitRoles() {
             try {
                 const response = await addRole(this.id, this.selectedRoles);
-                console.log("Roles updated successfully:", response);
                 this.messageType = 'success';
                 this.message = response.message;
                 this.isOpenModalInfo = true;

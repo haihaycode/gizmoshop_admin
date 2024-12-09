@@ -33,7 +33,7 @@ export const listInventory = async (inventoryName, active, page = 0, limit = 10,
     }
 };
 
-
+//  thay đổi trạng thái của kho
 export const changeActiveById = async (id) => {
     try {
         const response = await Axios.put(`${HOST}/api/public/inventory/changeactive/${id}`,);
@@ -57,6 +57,15 @@ export const getInventoryById = async (id) => {
 export const updateInventory = async (id, inventoryObject) => {
     try {
         const response = await Axios.put(`${HOST}/api/public/inventory/update/${id}`, inventoryObject);
+        return response.data;
+    } catch (error) {
+        throw new Error(`${error}`);
+    }
+};
+
+export const fetchChartInventory = async () => {
+    try {
+        const response = await Axios.get(`${HOST}/api/public/inventory/InventoryStats`);
         return response.data;
     } catch (error) {
         throw new Error(`${error}`);

@@ -1,13 +1,13 @@
 <template>
     <ModalBox :isOpen="isOpen" :loading="isLoading" :closeModal="closeModal" :closeText="'Đóng'">
-        <!-- Modal Header Slot -->
+
         <template #header>
             <h3 class="sm:text-sm md:text-lg font-bold">Cập nhật kho hàng : {{ form.inventoryName }}</h3>
         </template>
-        <!-- Modal Body Slot -->
+
         <template #body>
             <form @submit.prevent="validateForm">
-                <!-- Inventory Name -->
+
                 <div class="mb-4">
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="inventoryName">Tên kho *</label>
                     <input v-model="form.inventoryName"
@@ -17,7 +17,7 @@
                     <p class="lg:text-sm text-red-500">{{ errors.inventoryName }}</p>
                 </div>
 
-                <!-- City -->
+
                 <div class="mb-4">
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="city">Thành phố *</label>
                     <input v-model="form.city"
@@ -26,7 +26,7 @@
                     <p class="lg:text-sm text-red-500">{{ errors.city }}</p>
                 </div>
 
-                <!-- District -->
+
                 <div class="mb-4">
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="district">Quận/Huyện *</label>
                     <input v-model="form.district"
@@ -35,7 +35,7 @@
                     <p class="lg:text-sm text-red-500">{{ errors.district }}</p>
                 </div>
 
-                <!-- Commune -->
+
                 <div class="mb-4">
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="commune">Phường/Xã *</label>
                     <input v-model="form.commune"
@@ -44,7 +44,7 @@
                     <p class="lg:text-sm text-red-500">{{ errors.commune }}</p>
                 </div>
 
-                <!-- Latitude -->
+
                 <div class="mb-4">
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="latitude">Vĩ độ *</label>
                     <input v-model="form.latitude"
@@ -53,7 +53,7 @@
                     <p class="lg:text-sm text-red-500">{{ errors.latitude }}</p>
                 </div>
 
-                <!-- Longitude -->
+
                 <div class="mb-4">
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="longitude">Kinh độ *</label>
                     <input v-model="form.longitude"
@@ -62,7 +62,7 @@
                     <p class="lg:text-sm text-red-500">{{ errors.longitude }}</p>
                 </div>
 
-                <!-- Active Status -->
+
                 <div class="mb-4">
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="active">Hoạt động *</label>
                     <select v-model="form.active"
@@ -150,7 +150,6 @@ export default {
             }
         },
         validateForm() {
-            // Reset errors
             this.errors = {};
 
             const schema = Yup.object().shape({

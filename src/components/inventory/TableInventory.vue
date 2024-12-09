@@ -34,6 +34,9 @@
                     class="px-6 py-3 text-left text-xs font-medium text-gray-50 uppercase tracking-wider">
                     Trạng thái <span v-html="getSortIcon('active')"></span>
                 </th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-50 uppercase tracking-wider">
+                    Thao tác
+                </th>
             </template>
             <!-- Body Slot -->
             <template #body>
@@ -50,6 +53,10 @@
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         <toggleButton :is-toggled="item.active" @update:isToggled="updateStatusInventory(item.id)">
                         </toggleButton>
+                    </td>
+                    <td>
+                        <ExportButtonComponent @click.stop :nameExport="'inventory'" :idExport="item.id">
+                        </ExportButtonComponent>
                     </td>
                 </tr>
             </template>
@@ -81,6 +88,8 @@ import TableComponent from '../table/TableComponent.vue';
 import updateInventory from './updateInventory.vue';
 import Pagination from '../pagination/Pagination.vue';
 import toggleButton from '../buttons/toggleButton.vue';
+import ExportButtonComponent from '../fileTransfer/ExportButtonComponent.vue';
+
 
 export default {
     name: 'TableInventoryComponent',
@@ -89,6 +98,7 @@ export default {
         updateInventory,
         Pagination,
         toggleButton,
+        ExportButtonComponent
     },
     data() {
         return {

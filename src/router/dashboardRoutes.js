@@ -94,7 +94,78 @@ const dashboardRoutes = [
 
         ]
     },
+    // statistic\SalesRevenueStatistics.vue
+    {
+        path: '/statistic/Sales-Revenue-Statistics',
+        component: useComponent('admin'),
+        children: [
 
+            {
+                path: '',
+                name: 'SalesRevenueStatistics',
+                meta: {
+                    title: "Thống kê doanh thu",
+                    description: "Gizmo"
+                },
+                components: {
+                    default: useComponent('statistic/SalesRevenueStatistics'),
+                    header: Header,
+                    footer: Footer,
+                    sideBar: sideBar
+                }
+
+            },
+
+        ]
+    },
+    //statistic\ProductStatistics.vue
+    {
+        path: '/statistic/Product-Statistics',
+        component: useComponent('admin'),
+        children: [
+
+            {
+                path: '',
+                name: 'ProductStatistics',
+                meta: {
+                    title: "Thống kê sản phẩm",
+                    description: "Gizmo"
+                },
+                components: {
+                    default: useComponent('statistic/ProductStatistics'),
+                    header: Header,
+                    footer: Footer,
+                    sideBar: sideBar
+                }
+
+            },
+
+        ]
+    },
+    //statistic\SupplierStatistics.vue
+    {
+        path: '/statistic/Supplier-Statistics',
+        component: useComponent('admin'),
+        children: [
+
+            {
+                path: '',
+                name: 'SupplierStatistics',
+                meta: {
+                    title: "Thống kê Nhà cung cấp",
+                    description: "Gizmo"
+                },
+                components: {
+                    default: useComponent('statistic/SupplierStatistics'),
+                    header: Header,
+                    footer: Footer,
+                    sideBar: sideBar
+                }
+
+            },
+
+        ]
+    },
 ];
 
 export default dashboardRoutes;

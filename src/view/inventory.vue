@@ -11,11 +11,15 @@
             </button>
         </div>
 
-        <AddNewInventory :isOpen="AddNewInventoryIsModalOpen" @close="triggerModalAddNewInventory"  @create-success="loadInventory" ></AddNewInventory>
+        <AddNewInventory :isOpen="AddNewInventoryIsModalOpen" @close="triggerModalAddNewInventory"
+            @create-success="loadInventory"></AddNewInventory>
 
 
         <!-- list -->
         <TableInventory ref="tableInventory"></TableInventory>
+        <!-- import and export excel -->
+        <ImportAndExportForInventoryComponent />
+        <chartInventory></chartInventory>
     </div>
 </template>
 
@@ -23,12 +27,16 @@
 import StatisticsCardsInventory from '@/components/inventory/StatisticsCardsInventory.vue';
 import TableInventory from '@/components/inventory/TableInventory.vue';
 import AddNewInventory from '@/components/inventory/AddNewInventory.vue';
+import chartInventory from '@/components/inventory/chartInventory.vue';
+import ImportAndExportForInventoryComponent from '@/components/inventory/ImportAndExportForInventoryComponent.vue';
 export default {
     name: 'InventoryView',
     components: {
         AddNewInventory,
         TableInventory,
-        StatisticsCardsInventory
+        StatisticsCardsInventory,
+        chartInventory,
+        ImportAndExportForInventoryComponent
     },
     data() {
         return {
@@ -40,8 +48,8 @@ export default {
             this.AddNewInventoryIsModalOpen = !this.AddNewInventoryIsModalOpen;
         },
         async loadInventory() {
-        await this.$refs.tableInventory.loadInventory(); 
-    }
+            await this.$refs.tableInventory.loadInventory();
+        }
     }
 };
 </script>
