@@ -75,3 +75,53 @@ export const getTopSellingBySupplier = async (startDate, endDate, page = 0, size
         throw error;
     }
 };
+
+
+export const getAllSupplierActive = async (keyword, page = 0, limit = 5, sort = 'id,desc') => {
+    try {
+        const params = { page, limit }
+        if (keyword) params.keyword = keyword
+        if (sort) params.sort = sort
+        const response = await Axios.get(`${HOST}/api/admin/supplier-all-ac`, { params });
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching top-selling products by supplier:", error);
+        throw error;
+    }
+};
+
+export const getAllProductBySupplier = async (accountId, keyword = '', page = 0, limit = 5, sort = 'id,desc', startDate, endDate) => {
+    try {
+        const params = {
+            accountId,
+            keyword,
+            page,
+            limit,
+            sort,
+            startDate,
+            endDate
+        };
+
+        const response = await Axios.get(`${HOST}/api/admin/supplier-products-all`, { params });
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching products by supplier:", error);
+        throw error;
+    }
+};
+
+
+export const revenueStatisticsSupplerByIdAccount = async (accountId, startDate, endDate) => {
+    try {
+        const params = {
+            accountId,
+            startDate,
+            endDate
+        };
+        const response = await Axios.get(`${HOST}/api/admin/revenue-statistics-suppler-by-id-account`, { params });
+        return response.data;
+    } catch (error) {
+        console.error("Error Revenue Statistics Suppler By Id Account:", error);
+        throw error;
+    }
+};

@@ -19,7 +19,7 @@
                 <slot name="header">
                     <h3 class="text-lg font-bold">{{ header }}</h3>
                 </slot>
-                <button @click="closeModal" class="text-gray-400 hover:text-gray-600">
+                <button @click="closeModal" class="text-gray-400 hover:text-gray-600 text-2xl">
                     &times;
                 </button>
             </div>
