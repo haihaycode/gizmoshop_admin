@@ -109,3 +109,19 @@ export const getAllProductBySupplier = async (accountId, keyword = '', page = 0,
         throw error;
     }
 };
+
+
+export const revenueStatisticsSupplerByIdAccount = async (accountId, startDate, endDate) => {
+    try {
+        const params = {
+            accountId,
+            startDate,
+            endDate
+        };
+        const response = await Axios.get(`${HOST}/api/admin/revenue-statistics-suppler-by-id-account`, { params });
+        return response.data;
+    } catch (error) {
+        console.error("Error Revenue Statistics Suppler By Id Account:", error);
+        throw error;
+    }
+};

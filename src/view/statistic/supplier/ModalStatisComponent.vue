@@ -2,22 +2,41 @@
 <template>
     <div>
         <ModalBox :isOpen="isOpen" :closeModal="closeModal" :closeText="'Đóng'" :footerIsActive="false"
-            :loading="isLoading">
+            :loading="loadingProduct">
             <template #header>
                 <h3 class="sm:text-sm md:text-lg font-bold">
                     <i class='bx bx-user'></i> Thông tin nhà cung cấp @NCC_{{ idAccount }}
                 </h3>
             </template>
             <template #body>
+
+                <div class="flex justify-between space-x-4">
+                    <!-- Doanh thu tháng -->
+                    <div class="flex-1 bg-white shadow-lg rounded-lg p-4">
+                        <h3 class="text-lg font-semibold text-gray-800">Doanh thu tháng này</h3>
+                        <p class="text-xl font-bold text-gray-600">{{ formatCurrencyVN(revenueTotalMonth) }}</p>
+                    </div>
+
+                    <!-- Doanh thu tuần -->
+                    <div class="flex-1 bg-white shadow-lg rounded-lg p-4">
+                        <h3 class="text-lg font-semibold text-gray-800">Doanh thu tuần này</h3>
+                        <p class="text-xl font-bold text-gray-600">{{ formatCurrencyVN(revenueTotalWeek) }}</p>
+                    </div>
+                </div>
+
                 <div class="">
                     <div>
                         <h3 class="sm:text-sm md:text-xl mb-2 flex items-center justify-between">
                             <div>
                                 <i class='bx bx-package'></i> Sản phẩm đang giao dịch và đã cung cấp
                             </div>
+                            <SearchByStartDateAndEndDate
+                                @search="(startDate, endDate) => { filter.startDate = startDate; filter.endDate = endDate; handleFetchAllProductByAccountID() }" />
                             <SearchByKeywordComponent
                                 @search="(keyword) => { filter.keyword = keyword; handleFetchAllProductByAccountID(); }" />
+
                         </h3>
+
                     </div>
 
                     <TableComponent>
@@ -97,7 +116,7 @@
                                 <td class="text-center">{{ product.productBrand.name }}</td>
                                 <td class="text-center"> còn {{ product.productInventoryResponse.quantity }} (kho) {{
                                     product.productInventoryResponse.inventory.inventoryName
-                                }}</td>
+                                    }}</td>
 
                                 <td class="text-center">{{ product.productStatusResponse.name }}</td>
 
@@ -111,6 +130,14 @@
                         </template>
                     </TableComponent>
                 </div>
+                <div>
+                    <div class="flex-1 bg-white shadow-lg rounded-lg p-4  ">
+                        <h4 class="text-lg font-semibold">Biểu đồ doanh thu</h4>
+                        <div class="w-full h-full">
+                            <PieChart :data="pieChartData" />
+                        </div>
+                    </div>
+                </div>
             </template>
 
 
@@ -120,18 +147,23 @@
 
 <script>
 import ModalBox from '@/components/modal/ModalBox.vue';
-import { getAllProductBySupplier } from '@/api/statisticApi';
+import { getAllProductBySupplier, revenueStatisticsSupplerByIdAccount } from '@/api/statisticApi';
 import { mapGetters } from 'vuex';
 import TableComponent from '@/components/table/TableComponent.vue';
 import { formatCurrencyVN } from '@/utils/currencyUtils';
 import { loadImage } from '@/services/accountService';
 import Pagination from '@/components/pagination/Pagination.vue';
 import SearchByKeywordComponent from '@/components/filter/searchByKeywordComponent.vue';
+import SearchByStartDateAndEndDate from '@/components/filter/searchByStartDateAndEndDate.vue';
+import { Pie } from "vue-chartjs";
+import { Chart as ChartJS, Title, Tooltip, Legend, ArcElement, CategoryScale, LinearScale } from "chart.js";
+ChartJS.register(Title, Tooltip, Legend, ArcElement, CategoryScale, LinearScale);
 
 export default {
 
     data() {
         return {
+            loadingProduct: false,
             filter: {
                 sort: {
                     sortField: 'id',
@@ -145,10 +177,16 @@ export default {
             },
             products: [],
             pagination: null,
+            revenueTotalMonth: 0,
+            revenueTotalWeek: 0,
+            revenueTotalData6: []
+
         }
     },
     components: {
+        PieChart: Pie,
         SearchByKeywordComponent,
+        SearchByStartDateAndEndDate,
         TableComponent,
         ModalBox,
         Pagination
@@ -166,11 +204,29 @@ export default {
         isOpen(newVal) {
             if (newVal) {
                 this.handleFetchAllProductByAccountID();
+                this.handleFetchRevenueTotal();
             }
         },
     },
     computed: {
-        ...mapGetters('loading', ['isLoading'])
+        ...mapGetters('loading', ['isLoading']),
+        pieChartData() {
+            const labels = this.revenueTotalData6.map(item => item.monthYear);
+            const data = this.revenueTotalData6.map(item => item.revenue);
+
+            return {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Doanh thu theo tháng',
+                        data: data,
+                        backgroundColor: ['#FF5733', '#33FF57', '#3357FF', '#FF33A8', '#FFD700', '#32CD32'],
+                        borderColor: '#fff',
+                        borderWidth: 1,
+                    },
+                ],
+            };
+        },
     },
     methods: {
         onImageError(event) {
@@ -188,15 +244,80 @@ export default {
             this.handleFetchAllProductByAccountID()
         },
         closeModal() {
+            this.revenueTotalMonth = 0
+            this.revenueTotalWeek = 0
+            this.startDate = null
+            this.endDate = null
+            this.keyword = ''
             this.filter.page = 0
             this.products = null
             this.$emit('closeModal')
         },
         async handleFetchAllProductByAccountID() {
-            const res = await getAllProductBySupplier(this.idAccount, this.filter.keyword, this.filter.page, this.filter.limit, `${this.filter.sort.sortField},${this.filter.sort.sortDirection}`, this.filter.startDate, this.filter.endDate);
-            this.products = res.data?.content
-            this.pagination = res.data
-            console.log(this.products)
+            this.loadingProduct = true;
+            try {
+                const res = await getAllProductBySupplier(this.idAccount, this.filter.keyword, this.filter.page, this.filter.limit, `${this.filter.sort.sortField},${this.filter.sort.sortDirection}`, this.filter.startDate, this.filter.endDate);
+                this.products = res.data?.content
+                this.pagination = res.data
+
+            } catch (error) {
+                console.error(error);
+
+            } finally {
+                this.loadingProduct = false
+            }
+        },
+        async handleFetchRevenueTotal() {
+            const currentDate = new Date();
+
+            // Tính toán ngày bắt đầu và kết thúc của tháng này
+            const startDateMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+            const endDateMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+            const startDateMonthFormatted = startDateMonth.toISOString().split('T')[0];
+            const endDateMonthFormatted = endDateMonth.toISOString().split('T')[0];
+
+            // Tính toán ngày bắt đầu và kết thúc của tuần này
+            const startDateWeek = new Date(currentDate);
+            startDateWeek.setDate(currentDate.getDate() - currentDate.getDay()); // Sunday
+            const endDateWeek = new Date(startDateWeek);
+            endDateWeek.setDate(startDateWeek.getDate() + 6); // Saturday
+            const startDateWeekFormatted = startDateWeek.toISOString().split('T')[0];
+            const endDateWeekFormatted = endDateWeek.toISOString().split('T')[0];
+
+            try {
+                // Gọi API để lấy doanh thu tháng này
+                const resMonth = await revenueStatisticsSupplerByIdAccount(this.idAccount, startDateMonthFormatted, endDateMonthFormatted);
+                this.revenueTotalMonth = resMonth.data?.totalPriceOrder;
+
+                // Gọi API để lấy doanh thu tuần này
+                const resWeek = await revenueStatisticsSupplerByIdAccount(this.idAccount, startDateWeekFormatted, endDateWeekFormatted);
+                this.revenueTotalWeek = resWeek.data?.totalPriceOrder;
+
+                let lastSixMonths = [];
+                for (let i = 0; i < 6; i++) {
+                    let monthStart = new Date(currentDate.getFullYear(), currentDate.getMonth() - i, 1);
+                    let monthEnd = new Date(currentDate.getFullYear(), currentDate.getMonth() - i + 1, 0);
+
+                    const monthStartFormatted = monthStart.toISOString().split('T')[0];
+                    const monthEndFormatted = monthEnd.toISOString().split('T')[0];
+
+                    lastSixMonths.push({ start: monthStartFormatted, end: monthEndFormatted });
+                }
+
+
+                for (const period of lastSixMonths) {
+                    const res = await revenueStatisticsSupplerByIdAccount(this.idAccount, period.start, period.end);
+                    const monthYear = `${new Date(period.start).getMonth() + 1}/${new Date(period.start).getFullYear()}`;
+                    this.revenueTotalData6.push({
+                        monthYear: monthYear,
+                        revenue: res.data?.totalPriceOrder || 0
+                    });
+                }
+
+
+            } catch (error) {
+                console.error("Error fetching revenue data:", error);
+            }
         },
         handlePageChange(newPage) {
             this.filter.page = newPage - 1;
