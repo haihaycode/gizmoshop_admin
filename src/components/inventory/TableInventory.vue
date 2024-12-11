@@ -40,8 +40,8 @@
             </template>
             <!-- Body Slot -->
             <template #body>
-                <tr v-for="(item, index) in inventoryList" :key="index" class="hover:bg-gray-300"
-                    @click="updateInventoryModal(item.id)">
+                <tr :class="index % 2 === 0 ? 'bg-slate-200' : ''" v-for="(item, index) in inventoryList" :key="index"
+                    class="hover:bg-gray-300" @click="updateInventoryModal(item.id)">
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ item.id }}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ item.inventoryName }}
                     </td>

@@ -1,156 +1,129 @@
 <template>
-    <div class="p-6 bg-gray-100 space-y-6">
-        <!-- Tổng quan nhà cung cấp -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div class="bg-white shadow-lg rounded-lg p-6 text-center">
-                <h3 class="text-xl font-semibold text-gray-700">Tổng doanh thu</h3>
-                <p class="text-3xl font-bold text-blue-600 mt-2">{{ formatCurrency(totalRevenue) }}</p>
-            </div>
-            <div class="bg-white shadow-lg rounded-lg p-6 text-center">
-                <h3 class="text-xl font-semibold text-gray-700">Số lượng sản phẩm đã bán</h3>
-                <p class="text-3xl font-bold text-green-500 mt-2">{{ totalSold }}</p>
-            </div>
+    <div class="mx-2">
+        <div>
+            <SearchByKeywordComponent
+                @search="(keyword) => { filter.keyword = keyword; handleFetchAllSupplierActive(); }" />
         </div>
+        <table class="table-auto w-full border ">
+            <thead>
+                <tr class="bg-blue-500 text-white">
+                    <th class="border border-gray-200 px-4 py-2 text-left  cursor-pointer" @click="sortBy('s.id')">
+                        <i v-if="filter.sort.sortField === 's.id'"
+                            :class="filter.sort.sortDirection === 'asc' ? 'bx bx-sort-up' : 'bx bx-sort-down'"></i>
+                        MÃ
+                    </th>
 
-        <!-- Top sản phẩm bán chạy -->
-        <div class="bg-white shadow-lg rounded-lg p-6">
-            <h3 class="text-xl font-semibold text-gray-700 mb-4">Top sản phẩm bán chạy</h3>
-            <div class="overflow-x-auto">
-                <table class="table-auto w-full border border-gray-200">
-                    <thead>
-                        <tr class="bg-gray-50">
-                            <th class="border border-gray-200 px-4 py-2 text-left text-gray-700">Mã sản phẩm</th>
-                            <th class="border border-gray-200 px-4 py-2 text-left text-gray-700">Tên sản phẩm</th>
-                            <th class="border border-gray-200 px-4 py-2 text-left text-gray-700">Tên nhà cung cấp</th>
-                            <th class="border border-gray-200 px-4 py-2 text-left text-gray-700">Số lượng bán</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="product in topSellingProducts" :key="product.id" class="hover:bg-gray-50">
-                            <td class="border border-gray-200 px-4 py-2">{{ product.id }}</td>
-                            <td class="border border-gray-200 px-4 py-2">{{ product.name }}</td>
-                            <td class="border border-gray-200 px-4 py-2">{{ product.nameAuth }}</td>
-                            <td class="border border-gray-200 px-4 py-2">{{ product.quantity }}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <canvas id="topSellingChart" class="mt-6"></canvas>
-        </div>
-
-        <!-- Sản phẩm tồn kho -->
-
+                    <th class="border border-gray-200 px-4 py-2 text-left  cursor-pointer"
+                        @click="sortBy('s.business_name')">
+                        <i v-if="filter.sort.sortField === 's.business_name'"
+                            :class="filter.sort.sortDirection === 'asc' ? 'bx bx-sort-up' : 'bx bx-sort-down'"></i>
+                        HỌ & TÊN
+                    </th>
+                    <th class="border border-gray-200 px-4 py-2 text-left  cursor-pointer" @click="sortBy('s.taxCode')">
+                        <i v-if="filter.sort.sortField === 's.taxCode'"
+                            :class="filter.sort.sortDirection === 'asc' ? 'bx bx-sort-up' : 'bx bx-sort-down'"></i>
+                        MST *
+                    </th>
+                    <th class="border border-gray-200 px-4 py-2 text-left " @click="sortBy('s.balance')">
+                        <i v-if="filter.sort.sortField === 's.balance'"
+                            :class="filter.sort.sortDirection === 'asc' ? 'bx bx-sort-up' : 'bx bx-sort-down'"></i>
+                        VÍ
+                        / VÍ KHÓA
+                    </th>
+                    <th class="border border-gray-200 px-4 py-2 text-left  cursor-pointer"
+                        @click="sortBy('s.description')">
+                        <i v-if="filter.sort.sortField === 's.description'"
+                            :class="filter.sort.sortDirection === 'asc' ? 'bx bx-sort-up' : 'bx bx-sort-down'"></i>MÔ TẢ
+                    </th>
+                    <th class="border border-gray-200 px-4 py-2 text-left cursor-pointer">TK_KHÁCH_(*)
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr :class="index % 2 === 0 ? 'bg-slate-200' : ''" class="hover:bg-blue-100" v-for="s in suppliers"
+                    @click="accountSelected = s.accountResponse.id" :key="s.id">
+                    <td class="border border-gray-200 px-4 py-2">@NCC_{{ s.id }}</td>
+                    <td class="border border-gray-200 px-4 py-2">{{ s.nameSupplier }}</td>
+                    <td class="border border-gray-200 px-4 py-2">{{ s.tax_code }}</td>
+                    <td class="border border-gray-200 px-4 py-2">{{ formatCurrencyVN(s.balance) }} / {{
+                        formatCurrencyVN(s.frozen_balance) }}</td>
+                    <td class="border border-gray-200 px-4 py-2">{{ s.description }}</td>
+                    <td class=" px-4 py-2 text-blue-500">@MKH_{{ s.accountResponse.id }} _ {{ s.accountResponse.email
+                        }} _ {{ s.accountResponse.fullname }}</td>
+                </tr>
+            </tbody>
+        </table>
+        <Pagination :total-items="pagination?.totalElements" :items-per-page="filter.size"
+            :current-page="filter.page + 1" @page-changed="handlePageChange" @limit-changed="handleLimitChange">
+        </Pagination>
     </div>
+
+    <ModalStatisComponent :idAccount="accountSelected" :isOpen="accountSelected" @closeModal="accountSelected = null">
+    </ModalStatisComponent>
 </template>
+
 <script>
-import { ref, onMounted } from "vue";
-import Chart from "chart.js/auto";
-import { getPartnerStatistics, getTopSellingBySupplier } from "@/api/statisticApi";
-
+import { getAllSupplierActive } from '@/api/statisticApi';
+import { formatCurrencyVN } from '@/utils/currencyUtils';
+import Pagination from '@/components/pagination/Pagination.vue';
+import SearchByKeywordComponent from '@/components/filter/searchByKeywordComponent.vue';
+import ModalStatisComponent from './supplier/ModalStatisComponent.vue';
 export default {
-    name: "SupplierStatistics",
-    setup() {
-        const totalRevenue = ref(0); // Tổng doanh thu
-        const totalSold = ref(0); // Số lượng sản phẩm đã bán
-        const topSellingProducts = ref([]);
-        const stockProducts = ref([]);
-
-        // Fetch data from APIs
-        const fetchStatistics = async () => {
-            try {
-                const { data } = await getPartnerStatistics("2024-01-01", "2024-12-31"); // Thay bằng ngày thực tế
-                totalRevenue.value = data.amountSupplier;
-                totalSold.value = data.quantity;
-            } catch (error) {
-                console.error("Error fetching partner statistics:", error);
-            }
-        };
-
-        const fetchTopSellingProducts = async () => {
-            try {
-                const { data } = await getTopSellingBySupplier("2024-01-01", "2024-12-31", 0, 5); // Lấy 5 sản phẩm bán chạy nhất
-                topSellingProducts.value = data.content.map((item) => ({
-                    id: item.id,
-                    name: item.name,
-                    nameAuth: item.nameAuth,
-                    quantitySold: item.quantity,
-                }));
-            } catch (error) {
-                console.error("Error fetching top-selling products:", error);
-            }
-        };
-
-        const renderTopSellingChart = () => {
-            const ctx = document.getElementById("topSellingChart").getContext("2d");
-            new Chart(ctx, {
-                type: "bar",
-                data: {
-                    labels: topSellingProducts.value.map((p) => p.name),
-                    datasets: [
-                        {
-                            label: "Số lượng bán",
-                            data: topSellingProducts.value.map((p) => p.quantitySold),
-                            backgroundColor: "rgba(75, 192, 192, 0.6)",
-                        },
-                    ],
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: { display: false },
-                    },
-                    scales: {
-                        y: { beginAtZero: true },
-                    },
-                },
-            });
-        };
-
-
-
-        const formatCurrency = (value) => {
-            return new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" }).format(value);
-        };
-
-        onMounted(async () => {
-            await fetchStatistics();
-            await fetchTopSellingProducts();
-            renderTopSellingChart();
-        });
-
-        return {
-            totalRevenue,
-            totalSold,
-            topSellingProducts,
-            stockProducts,
-            formatCurrency,
-        };
+    components: {
+        Pagination,
+        SearchByKeywordComponent,
+        ModalStatisComponent,
     },
-};
+    data() {
+        return {
+            filter: {
+                sort: {
+                    sortField: 's.id',
+                    sortDirection: 'desc'
+                },
+                keyword: '',
+                page: 0,
+                size: 5
+            },
+            accountSelected: null,
+            suppliers: null,
+            pagination: null,
+        }
+    },
+    mounted() {
+        this.handleFetchAllSupplierActive()
+    },
+    methods: {
+        formatCurrencyVN,
+        sortBy(sortField) {
+            if (this.filter.sort.sortField === sortField) {
+                this.filter.sort.sortDirection = this.filter.sort.sortDirection === 'asc' ? 'desc' : 'asc';
+            } else {
+                this.filter.sort.sortField = sortField;
+                this.filter.sort.sortDirection = 'asc';
+            }
+            this.handleFetchAllSupplierActive()
+        },
+        async handleFetchAllSupplierActive() {
+            try {
+                const res = await getAllSupplierActive(this.filter.keyword, this.filter.page, this.filter.size, `${this.filter.sort.sortField},${this.filter.sort.sortDirection}`)
+                this.suppliers = res.data.content
+                this.pagination = res.data
+            } catch (error) {
+                console.error(error)
+            }
+        },
+        handlePageChange(newPage) {
+            this.filter.page = newPage - 1;
+            this.handleFetchAllSupplierActive();
+        },
+        handleLimitChange(limitPanigation) {
+            this.filter.size = limitPanigation;
+            this.filter.page = 0;
+            this.handleFetchAllSupplierActive();
+        },
+    }
+}
 </script>
 
-<style scoped>
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 1rem;
-}
-
-th,
-td {
-    text-align: left;
-    padding: 8px;
-}
-
-th {
-    background-color: #f9fafb;
-}
-
-tbody tr:nth-child(even) {
-    background-color: #f1f5f9;
-}
-
-canvas {
-    max-height: 300px;
-}
-</style>
+<style></style>

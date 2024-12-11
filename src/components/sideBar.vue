@@ -2,7 +2,7 @@
     <div>
 
         <!--sidenav -->
-        <div v-if="isLeftMenuOpen"
+        <div v-if="isLeftMenuOpen" @click="isLeftMenuOpen = !isLeftMenuOpen"
             class="fixed left-0 top-0 w-64 h-full bg-[#163a84] p-4 z-30 sidebar-menu transition-transform custom-scrollbar  md:block overflow-y-auto ">
             <a href="/" class="flex items-center  border-opacity-60  ">
                 <h2 class="hidden md:block lg:block font-bold text-2xl pb-4 text-white">
