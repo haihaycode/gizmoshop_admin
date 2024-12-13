@@ -12,29 +12,56 @@
 
                 <div class="flex justify-between space-x-4">
                     <!-- Doanh thu tháng -->
-                    <div class="flex-1 bg-white shadow-lg rounded-lg p-4">
+                    <div class="flex-1 bg-white border rounded-lg p-4">
                         <h3 class="text-lg font-semibold text-gray-800">Doanh thu tháng này</h3>
                         <p class="text-xl font-bold text-gray-600">{{ formatCurrencyVN(revenueTotalMonth) }}</p>
                     </div>
 
                     <!-- Doanh thu tuần -->
-                    <div class="flex-1 bg-white shadow-lg rounded-lg p-4">
+                    <div class="flex-1 bg-white border rounded-lg p-4">
                         <h3 class="text-lg font-semibold text-gray-800">Doanh thu tuần này</h3>
                         <p class="text-xl font-bold text-gray-600">{{ formatCurrencyVN(revenueTotalWeek) }}</p>
                     </div>
                 </div>
 
-                <div class="">
+                <div class="p-2 border rounded-md mt-2">
+                    <div class="flex justify-between items-center space-x-4 mt-2">
+                        <h3 class="text-lg font-semibold text-gray-800"> - Doanh thu theo khoảng thời gian</h3>
+                        <div class="flex space-x-4">
+                            <input type="date" v-model="startDateTT"
+                                class="px-4 py-2 border border-gray-300 rounded-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                            <input type="date" v-model="endDateTT"
+                                class="px-4 py-2 border border-gray-300 rounded-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                            <button
+                                class="px-4 py-2 bg-blue-600 text-white rounded-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                @click="handleSearchTT">
+                                Tìm kiếm
+                            </button>
+                        </div>
+                    </div>
+                    <div v-if="isLoadingRevenueTotalBetween">
+                        <i class="bx bx-loader bx-spin"></i> Đang tải dữ liệu ...
+                    </div>
+                    <div v-if="revenueTotalBetween && !isLoadingRevenueTotalBetween" class="flex">
+                        <h3 class="text-xl font-medium text-gray-800">Doanh thu từ {{ startDateTT }} - {{ endDateTT }} :
+                            &nbsp;
+                        </h3>
+                        <h3 class="text-xl font-medium text-blue-800">{{ formatCurrencyVN(revenueTotalBetween) }}
+                        </h3>
+                    </div>
+                </div>
+
+
+                <div class="p-2 mt-2">
                     <div>
                         <h3 class="sm:text-sm md:text-xl mb-2 flex items-center justify-between">
-                            <div>
-                                <i class='bx bx-package'></i> Sản phẩm đang giao dịch và đã cung cấp
+                            <div class="text-lg font-semibold text-gray-800">
+                                - Sản phẩm đang giao dịch và đã cung cấp
                             </div>
                             <SearchByStartDateAndEndDate
                                 @search="(startDate, endDate) => { filter.startDate = startDate; filter.endDate = endDate; handleFetchAllProductByAccountID() }" />
                             <SearchByKeywordComponent
                                 @search="(keyword) => { filter.keyword = keyword; handleFetchAllProductByAccountID(); }" />
-
                         </h3>
 
                     </div>
@@ -134,7 +161,7 @@
                     <div class="flex-1 bg-white shadow-lg rounded-lg p-4  ">
                         <h4 class="text-lg font-semibold">Biểu đồ doanh thu</h4>
                         <div class="w-full h-full">
-                            <PieChart :data="pieChartData" />
+                            <LineChart :data="lineChartData" />
                         </div>
                     </div>
                 </div>
@@ -155,14 +182,23 @@ import { loadImage } from '@/services/accountService';
 import Pagination from '@/components/pagination/Pagination.vue';
 import SearchByKeywordComponent from '@/components/filter/searchByKeywordComponent.vue';
 import SearchByStartDateAndEndDate from '@/components/filter/searchByStartDateAndEndDate.vue';
-import { Pie } from "vue-chartjs";
-import { Chart as ChartJS, Title, Tooltip, Legend, ArcElement, CategoryScale, LinearScale } from "chart.js";
-ChartJS.register(Title, Tooltip, Legend, ArcElement, CategoryScale, LinearScale);
+import notificationService from '@/services/notificationService';
+
+
+import { Line } from 'vue-chartjs';
+import { Chart as ChartJS, Title, Tooltip, Legend, LineElement, PointElement, CategoryScale, LinearScale } from 'chart.js';
+
+ChartJS.register(Title, Tooltip, Legend, LineElement, PointElement, CategoryScale, LinearScale);
+
 
 export default {
 
     data() {
         return {
+            startDateTT: null,
+            endDateTT: null,
+            revenueTotalBetween: null,
+            isLoadingRevenueTotalBetween: false,
             loadingProduct: false,
             filter: {
                 sort: {
@@ -184,7 +220,7 @@ export default {
         }
     },
     components: {
-        PieChart: Pie,
+        LineChart: Line,
         SearchByKeywordComponent,
         SearchByStartDateAndEndDate,
         TableComponent,
@@ -210,7 +246,7 @@ export default {
     },
     computed: {
         ...mapGetters('loading', ['isLoading']),
-        pieChartData() {
+        lineChartData() {
             const labels = this.revenueTotalData6.map(item => item.monthYear);
             const data = this.revenueTotalData6.map(item => item.revenue);
 
@@ -220,13 +256,15 @@ export default {
                     {
                         label: 'Doanh thu theo tháng',
                         data: data,
-                        backgroundColor: ['#FF5733', '#33FF57', '#3357FF', '#FF33A8', '#FFD700', '#32CD32'],
-                        borderColor: '#fff',
-                        borderWidth: 1,
+                        fill: false,
+                        borderColor: '#FF5733',
+                        tension: 0.1,
+                        borderWidth: 2
                     },
                 ],
             };
         },
+
     },
     methods: {
         onImageError(event) {
@@ -234,6 +272,21 @@ export default {
         },
         loadImage,
         formatCurrencyVN,
+        async handleSearchTT() {
+            if (!this.startDateTT || !this.endDateTT) {
+                notificationService.warning("vui lòng chọn khoảng thời gian ")
+                return
+            }
+            this.isLoadingRevenueTotalBetween = true
+            try {
+                const res = await await revenueStatisticsSupplerByIdAccount(this.idAccount, this.startDateTT, this.endDateTT);
+                this.revenueTotalBetween = res.data?.totalPriceOrder ? res.data?.totalPriceOrder : 0
+            } catch (error) {
+                console.error(error);
+            } finally {
+                this.isLoadingRevenueTotalBetween = false
+            }
+        },
         sortBy(sortField) {
             if (this.filter.sort.sortField === sortField) {
                 this.filter.sort.sortDirection = this.filter.sort.sortDirection === 'asc' ? 'desc' : 'asc';
@@ -251,6 +304,8 @@ export default {
             this.keyword = ''
             this.filter.page = 0
             this.products = null
+            this.revenueTotalData6 = []
+            this.revenueTotalBetween = null
             this.$emit('closeModal')
         },
         async handleFetchAllProductByAccountID() {
