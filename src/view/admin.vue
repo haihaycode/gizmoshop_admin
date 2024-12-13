@@ -10,7 +10,8 @@
       <!-- Content -->
       <section class="main">
         <!-- Use Vuex's isLoading state -->
-        <LoadingComponent v-if="isLoading" :loading="isLoading"></LoadingComponent>
+        <LoadingComponent v-if="$route.name !== 'SalesRevenueStatistics' && isLoading" :loading="isLoading">
+        </LoadingComponent>
         <router-view></router-view>
       </section>
       <!-- End Content -->

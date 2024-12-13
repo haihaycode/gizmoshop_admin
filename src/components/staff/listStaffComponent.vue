@@ -28,7 +28,7 @@
         <th @click="changeSort('updateDate')"
           class="px-6 py-3 text-left text-xs font-medium text-gray-50 uppercase tracking-wider">Cập nhật lần cuối<span
             v-html="getSortIcon('updateDate')"></span></th>
-        <th class="px-6 py-3 text-left text-xs font-medium text-gray-50 uppercase tracking-wider">Công cụ</th>
+
         <th @click="changeSort('deleted')"
           class="px-6 py-3 text-left text-xs font-medium text-gray-50 uppercase tracking-wider">Trạng thái <span
             v-html="getSortIcon('deleted')"></span></th>
@@ -36,19 +36,18 @@
 
       <!-- Body Slot -->
       <template #body>
-        <tr :class="index % 2 === 0 ? 'bg-slate-200' : ''" v-for="(item, index) in formattedStaffList" :key="index"
-          class="hover:bg-gray-300">
-          <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ item.id }}</td>
-          <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ item.fullname }}</td>
-          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.email }}</td>
-          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.sdt }}</td>
-          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.birthday }}</td>
-          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.extraInfo }}</td>
-          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.roles }}</td>
-          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.updateAt }}</td>
-          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-            <i @click="handleModalSetting(item.id)" class='bx bx-cog text-xl'></i>
+        <tr @click="handleModalSetting(item.id)" :class="index % 2 === 0 ? 'bg-slate-200' : ''"
+          v-for="(item, index) in formattedStaffList" :key="index" class="hover:bg-gray-300">
+          <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ item.id || 'không có ' }}</td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ item.fullname || 'không có ' }}
           </td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.email || 'không có ' }}</td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.sdt || 'không có ' }}</td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.birthday || 'không có ' }}</td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.extraInfo || 'không có ' }}</td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.roles || 'không có ' }}</td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.updateAt || 'không có ' }}</td>
+
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
             <toggleButton :is-toggled="!item.deleted" @update:isToggled="updateDeleted(item.id)"></toggleButton>
           </td>
@@ -112,7 +111,7 @@ import dayjs from "dayjs";
 import { mapGetters } from 'vuex';
 import setRoleComponentVue from './setRoleComponent.vue';
 import ModalBox from '../modal/ModalBox.vue';
-
+import Swal from 'sweetalert2'
 export default {
   name: 'listStaffComponent',
   components: {
@@ -150,6 +149,9 @@ export default {
           roles = roles.map(role => {
             if (role === "ROLE_ADMIN") {
               return "Quản trị viên";
+
+            } else if (role === "ROLE_SUPPLIER") {
+              return "Nhà cung cấp";
             } else if (role === "ROLE_SHIPPER") {
               return "Nhân viên giao hàng";
             } else if (role === "ROLE_STAFF") {
@@ -195,16 +197,28 @@ export default {
       }
       await this.getListAllAccount();
     },
+
     async resetPass() {
-      try {
-        await resertAccount(this.idAccountSelected)
-        notificationService.success("reset password thành công")
-      } catch (error) {
-        notificationService.error("reset password thất bại")
-        console.log(error)
+      // Hiển thị hộp thoại xác nhận
+      const result = await Swal.fire({
+        title: 'Bạn có chắc chắn?',
+        text: 'Thao tác này sẽ đặt lại mật khẩu cho tài khoản của bạn.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Đặt lại',
+        cancelButtonText: 'Hủy',
+        reverseButtons: true,
+      });
+      if (result.isConfirmed) {
+        try {
+          await resertAccount(this.idAccountSelected);
+          notificationService.success("Reset password thành công!");
+        } catch (error) {
+          notificationService.error("Reset password thất bại!");
+          console.log(error);
+        }
       }
     },
-
     getSortIcon(column) {
       if (this.sortField === column) {
         return this.sortDirection === 'asc'

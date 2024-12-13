@@ -42,14 +42,17 @@
             <template #body>
                 <tr :class="index % 2 === 0 ? 'bg-slate-200' : ''" v-for="(item, index) in inventoryList" :key="index"
                     class="hover:bg-gray-300" @click="updateInventoryModal(item.id)">
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ item.id }}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ item.inventoryName }}
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ item.id || 'không có '
+                        }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ item.inventoryName ||
+                        'không có ' }}
                     </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.city }}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.district }}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.commune }}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.longitude }}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.latitude }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.city || 'không có ' }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.district || 'không có ' }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.commune || 'không có ' }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.longitude || 'không có ' }}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.latitude || 'không có ' }}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         <toggleButton :is-toggled="item.active" @update:isToggled="updateStatusInventory(item.id)">
                         </toggleButton>

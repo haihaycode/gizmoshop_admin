@@ -1,5 +1,5 @@
 <template>
-    <div v-if="loading"
+    <div v-if="loading && !hidden"
         class="absolute inset-0 w-full h-full flex items-center justify-center bg-gray-500 bg-opacity-40 z-10">
         <div class="loader">
             <div class="dot"></div>
@@ -17,6 +17,10 @@ export default {
         loading: {
             type: Boolean,
             required: true,
+        },
+        hidden: {
+            type: Boolean,
+            required: false,
         },
     },
 };
