@@ -14,13 +14,17 @@
                     <!-- Doanh thu tháng -->
                     <div class="flex-1 bg-white border rounded-lg p-4">
                         <h3 class="text-lg font-semibold text-gray-800">Doanh thu tháng này</h3>
-                        <p class="text-xl font-bold text-gray-600">{{ formatCurrencyVN(revenueTotalMonth) }}</p>
+                        <p class="text-sm font-medium text-gray-600" v-if="isLoadingRevenueTotalMonth"><i
+                                class="bx bx-loader bx-spin"></i> Đang phân tích ...</p>
+                        <p class="text-xl font-bold text-gray-600" v-else>{{ formatCurrencyVN(revenueTotalMonth) }}</p>
                     </div>
 
                     <!-- Doanh thu tuần -->
                     <div class="flex-1 bg-white border rounded-lg p-4">
                         <h3 class="text-lg font-semibold text-gray-800">Doanh thu tuần này</h3>
-                        <p class="text-xl font-bold text-gray-600">{{ formatCurrencyVN(revenueTotalWeek) }}</p>
+                        <p class="text-sm font-medium text-gray-600" v-if="isLoadingRevenueTotalWeek"><i
+                                class="bx bx-loader bx-spin"></i> Đang phân tích ...</p>
+                        <p class="text-xl font-bold text-gray-600" v-else>{{ formatCurrencyVN(revenueTotalWeek) }}</p>
                     </div>
                 </div>
 
@@ -160,7 +164,10 @@
                 <div>
                     <div class="flex-1 bg-white shadow-lg rounded-lg p-4  ">
                         <h4 class="text-lg font-semibold">Biểu đồ doanh thu</h4>
-                        <div class="w-full h-full">
+                        <div v-if="isLoadingRevenueTotalData6">
+                            <i class="bx bx-loader bx-spin"></i> Đang phân tích biểu đồ ...
+                        </div>
+                        <div v-if="!isLoadingRevenueTotalData6 && revenueTotalData6" class="w-full h-full">
                             <LineChart :data="lineChartData" />
                         </div>
                     </div>
@@ -199,6 +206,9 @@ export default {
             endDateTT: null,
             revenueTotalBetween: null,
             isLoadingRevenueTotalBetween: false,
+            isLoadingRevenueTotalData6: false,
+            isLoadingRevenueTotalMonth: false,
+            isLoadingRevenueTotalWeek: false,
             loadingProduct: false,
             filter: {
                 sort: {
@@ -306,6 +316,8 @@ export default {
             this.products = null
             this.revenueTotalData6 = []
             this.revenueTotalBetween = null
+            this.startDateTT = null
+            this.endDateTT = null
             this.$emit('closeModal')
         },
         async handleFetchAllProductByAccountID() {
@@ -323,6 +335,7 @@ export default {
             }
         },
         async handleFetchRevenueTotal() {
+
             const currentDate = new Date();
 
             // Tính toán ngày bắt đầu và kết thúc của tháng này
@@ -340,14 +353,19 @@ export default {
             const endDateWeekFormatted = endDateWeek.toISOString().split('T')[0];
 
             try {
-                // Gọi API để lấy doanh thu tháng này
+                this.isLoadingRevenueTotalMonth = true
+                //  tháng này
                 const resMonth = await revenueStatisticsSupplerByIdAccount(this.idAccount, startDateMonthFormatted, endDateMonthFormatted);
                 this.revenueTotalMonth = resMonth.data?.totalPriceOrder;
+                this.isLoadingRevenueTotalMonth = false
 
-                // Gọi API để lấy doanh thu tuần này
+                // tuần này
+                this.isLoadingRevenueTotalWeek = true
                 const resWeek = await revenueStatisticsSupplerByIdAccount(this.idAccount, startDateWeekFormatted, endDateWeekFormatted);
                 this.revenueTotalWeek = resWeek.data?.totalPriceOrder;
+                this.isLoadingRevenueTotalWeek = false
 
+                this.isLoadingRevenueTotalData6 = true
                 let lastSixMonths = [];
                 for (let i = 0; i < 6; i++) {
                     let monthStart = new Date(currentDate.getFullYear(), currentDate.getMonth() - i, 1);
@@ -368,10 +386,13 @@ export default {
                         revenue: res.data?.totalPriceOrder || 0
                     });
                 }
+                this.isLoadingRevenueTotalData6 = false
 
 
             } catch (error) {
                 console.error("Error fetching revenue data:", error);
+            } finally {
+                this.isLoadingRevenueTotalData6 = false
             }
         },
         handlePageChange(newPage) {
