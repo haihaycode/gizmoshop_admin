@@ -1,35 +1,89 @@
 <template>
     <div class="p-6 bg-gray-100 space-y-6">
+
+        <div class="p-2 border rounded-md mt-2">
+            <div class="flex justify-between items-center space-x-4 mt-2">
+                <h3 class="text-lg font-semibold text-gray-800"> - Doanh thu theo khoảng thời gian</h3>
+                <div class="flex space-x-4">
+                    <input type="date" v-model="startDateTT"
+                        class="px-4 py-2 border border-gray-300 rounded-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                    <input type="date" v-model="endDateTT"
+                        class="px-4 py-2 border border-gray-300 rounded-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                    <button
+                        class="px-4 py-2 bg-blue-600 text-white rounded-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        @click="handleSearchTT">
+                        Tìm kiếm
+                    </button>
+                </div>
+            </div>
+            <div v-if="isLoadingRevenueTotalBetween">
+                <i class="bx bx-loader bx-spin"></i> Đang tải dữ liệu ...
+            </div>
+            <div v-if="revenueTotalBetweenShop && revenueTotalBetweenSupplier && !isLoadingRevenueTotalBetween"
+                class="">
+                <h3 class="text-xl font-medium text-gray-800">Doanh thu từ {{ startDateTT }} - {{ endDateTT }}
+                    &nbsp;
+                </h3>
+                <div>
+                    <h3 class="text-xl font-medium text-blue-800">Doanh thu cửa hàng : &nbsp;{{
+                        formatCurrencyVN(revenueTotalBetweenShop) }}
+                    </h3>
+                    <h3 class="text-xl font-medium text-blue-800">Doanh thu nhà cung cấp : &nbsp;{{
+                        formatCurrencyVN(revenueTotalBetweenSupplier) }}
+                    </h3>
+                </div>
+            </div>
+        </div>
         <!-- Tổng quan doanh thu -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div @click="showDetail('week')"
                 class="cursor-pointer bg-white shadow-md rounded-lg p-6 text-center hover:shadow-lg transition-shadow">
-                <h3 class="text-xl font-semibold text-gray-700">Doanh thu tuần này (Shop)</h3>
-                <p class="text-2xl font-bold text-blue-500 mt-2">{{ formatCurrency(weeklyRevenue.shop) }}</p>
-                <h4 class="text-md font-medium text-gray-600 mt-4">Nhà cung cấp:
-                    <span class="text-green-500">{{ formatCurrency(weeklyRevenue.supplier) }}</span>
-                </h4>
+                <div v-if="isLoadingWeeklyRevenue">
+                    <i class="bx bx-loader bx-spin"></i> Đang phân tích ...
+                </div>
+                <div v-else>
+                    <h3 class="text-xl font-semibold text-gray-700">Doanh thu tuần này (cửa hàng)</h3>
+                    <p class="text-2xl font-bold text-blue-500 mt-2">{{ formatCurrency(weeklyRevenue.shop) }}</p>
+                    <h4 class="text-md font-medium text-gray-600 mt-4">Nhà cung cấp:
+                        <span class="text-green-500">{{ formatCurrency(weeklyRevenue.supplier) }}</span>
+                    </h4>
+                </div>
             </div>
             <div @click="showDetail('month')"
                 class="cursor-pointer bg-white shadow-md rounded-lg p-6 text-center hover:shadow-lg transition-shadow">
-                <h3 class="text-xl font-semibold text-gray-700">Doanh thu tháng này (Shop)</h3>
-                <p class="text-2xl font-bold text-blue-500 mt-2">{{ formatCurrency(monthlyRevenue.shop) }}</p>
-                <h4 class="text-md font-medium text-gray-600 mt-4">Nhà cung cấp:
-                    <span class="text-green-500">{{ formatCurrency(monthlyRevenue.supplier) }}</span>
-                </h4>
+                <div v-if="isLoadingMonthlyRevenue">
+                    <i class="bx bx-loader bx-spin"></i> Đang phân tích ...
+                </div>
+                <div v-else>
+                    <h3 class="text-xl font-semibold text-gray-700">Doanh thu tháng này (cửa hàng)</h3>
+                    <p class="text-2xl font-bold text-blue-500 mt-2">{{ formatCurrency(monthlyRevenue.shop) }}</p>
+                    <h4 class="text-md font-medium text-gray-600 mt-4">Nhà cung cấp:
+                        <span class="text-green-500">{{ formatCurrency(monthlyRevenue.supplier) }}</span>
+                    </h4>
+                </div>
             </div>
         </div>
 
         <!-- Biểu đồ doanh thu 6 tháng gần đây -->
         <div class="bg-white shadow-md rounded-lg p-6">
             <h3 class="text-xl font-semibold text-gray-700 text-center mb-4">Doanh thu 6 tháng gần đây</h3>
-            <canvas id="revenueChart"></canvas>
+            <div v-if="isLoadingMonthlyRevenue6">
+                <i class="bx bx-loader bx-spin"></i> Đang phân tích ...
+            </div>
+            <div v-else>
+                <canvas id="revenueChart"></canvas>
+            </div>
         </div>
 
         <!-- Biểu đồ doanh thu 3 năm gần đây -->
         <div class="bg-white shadow-md rounded-lg p-6">
             <h3 class="text-xl font-semibold text-gray-700 text-center mb-4">Doanh thu 3 năm gần đây</h3>
-            <canvas id="yearlyRevenueChart"></canvas>
+            <div v-if="isLoadingYearRevenue3">
+                <i class="bx bx-loader bx-spin"></i> Đang phân tích ...
+            </div>
+            <div v-else>
+                <canvas id="yearlyRevenueChart"></canvas>
+            </div>
         </div>
 
         <!-- Modal Chi tiết -->
@@ -64,9 +118,39 @@
 import { ref, onMounted } from "vue";
 import Chart from "chart.js/auto";
 import { getSalesRevenueStatistics } from "@/api/statisticApi";
+import notificationService from "@/services/notificationService";
+import { formatCurrencyVN } from "@/utils/currencyUtils";
 
 export default {
     name: "SalesRevenueStatistics",
+    data() {
+        return {
+            startDateTT: null,
+            endDateTT: null,
+            revenueTotalBetweenShop: null,
+            revenueTotalBetweenSupplier: null,
+            isLoadingRevenueTotalBetween: false
+        }
+    },
+    methods: {
+        formatCurrencyVN,
+        async handleSearchTT() {
+            if (!this.startDateTT || !this.endDateTT) {
+                notificationService.warning("vui lòng chọn khoảng thời gian ")
+                return
+            }
+            this.isLoadingRevenueTotalBetween = true
+            try {
+                const res = await getSalesRevenueStatistics(this.startDateTT, this.endDateTT);
+                this.revenueTotalBetweenShop = res.data?.amountShop ? res.data?.amountShop : 0
+                this.revenueTotalBetweenSupplier = res.data?.amountSupplier ? res.data?.amountSupplier : 0
+            } catch (error) {
+                console.error(error);
+            } finally {
+                this.isLoadingRevenueTotalBetween = false
+            }
+        }
+    },
     setup() {
         const weeklyRevenue = ref({ shop: 0, supplier: 0 });
         const monthlyRevenue = ref({ shop: 0, supplier: 0 });
@@ -76,6 +160,12 @@ export default {
         const yearlyRevenue = ref([]);
 
         const isModalOpen = ref(false);
+
+        const isLoadingWeeklyRevenue = ref(false);
+        const isLoadingMonthlyRevenue = ref(false);
+        const isLoadingMonthlyRevenue6 = ref(false);
+        const isLoadingYearRevenue3 = ref(false);
+
         const modalTitle = ref("");
         const detailData = ref([]);
         const detailLabels = ref([]);
@@ -87,7 +177,7 @@ export default {
                 const data = [];
                 const labels = [];
 
-
+                isLoadingMonthlyRevenue.value = true
                 if (type === "month") {
                     modalTitle.value = "Chi tiết doanh thu tháng này";
 
@@ -119,7 +209,9 @@ export default {
                         data.push(revenue.data.amountShop);
                         labels.push(`${i}/${startDate.getMonth() + 1}`);
                     }
+                    isLoadingMonthlyRevenue.value = false
                 } else if (type === "week") {
+                    isLoadingWeeklyRevenue.value = true
                     modalTitle.value = "Chi tiết doanh thu tuần này";
 
                     const now = new Date();
@@ -151,7 +243,7 @@ export default {
                         labels.push(`${startDate.getDate()}/${startDate.getMonth() + 1}`);
                     }
                 }
-
+                isLoadingWeeklyRevenue.value = false
                 // Cập nhật dữ liệu chi tiết
                 detailData.value = data;
                 detailLabels.value = labels;
@@ -245,6 +337,7 @@ export default {
         };
 
         const fetchWeeklyRevenue = async () => {
+            isLoadingWeeklyRevenue.value = true
             const now = new Date();
             const startOfWeek = new Date(now);
             startOfWeek.setDate(now.getDate() - now.getDay() + 1);
@@ -255,9 +348,11 @@ export default {
                 startOfWeek.toISOString().split("T")[0],
                 endOfWeek.toISOString().split("T")[0]
             );
+            isLoadingWeeklyRevenue.value = false
         };
 
         const fetchMonthlyRevenue = async () => {
+            isLoadingMonthlyRevenue.value = true
             const now = new Date();
             const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
             const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
@@ -266,9 +361,11 @@ export default {
                 startOfMonth.toISOString().split("T")[0],
                 endOfMonth.toISOString().split("T")[0]
             );
+            isLoadingMonthlyRevenue.value = false
         };
 
         const fetchSixMonthRevenue = async () => {
+            isLoadingMonthlyRevenue6.value = true
             const now = new Date();
             const revenues = [];
             const labels = [];
@@ -288,8 +385,10 @@ export default {
             }
             sixMonthRevenue.value = revenues;
             sixMonthLabels.value = labels;
+            isLoadingMonthlyRevenue6.value = false
         };
         const fetchYearlyRevenue = async () => {
+            isLoadingYearRevenue3.value = true
             const now = new Date();
             const revenues = [];
             const labels = [];
@@ -307,6 +406,8 @@ export default {
             }
             yearlyRevenue.value = revenues;
             yearlyLabels.value = labels;
+            isLoadingYearRevenue3.value = false
+
         };
 
         const renderChart = () => {
@@ -409,8 +510,12 @@ export default {
             showDetail,
             closeModal,
             goToPage,
-            currentPage, // Thêm vào
-            totalPages,  // Thêm vào
+            currentPage,
+            totalPages,
+            isLoadingMonthlyRevenue6,
+            isLoadingYearRevenue3,
+            isLoadingWeeklyRevenue,
+            isLoadingMonthlyRevenue
         };
     },
 };

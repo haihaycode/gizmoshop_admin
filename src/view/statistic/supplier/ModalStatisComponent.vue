@@ -147,7 +147,7 @@
                                 <td class="text-center">{{ product.productBrand.name }}</td>
                                 <td class="text-center"> còn {{ product.productInventoryResponse.quantity }} (kho) {{
                                     product.productInventoryResponse.inventory.inventoryName
-                                    }}</td>
+                                }}</td>
 
                                 <td class="text-center">{{ product.productStatusResponse.name }}</td>
 
@@ -190,8 +190,6 @@ import Pagination from '@/components/pagination/Pagination.vue';
 import SearchByKeywordComponent from '@/components/filter/searchByKeywordComponent.vue';
 import SearchByStartDateAndEndDate from '@/components/filter/searchByStartDateAndEndDate.vue';
 import notificationService from '@/services/notificationService';
-
-
 import { Line } from 'vue-chartjs';
 import { Chart as ChartJS, Title, Tooltip, Legend, LineElement, PointElement, CategoryScale, LinearScale } from 'chart.js';
 

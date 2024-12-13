@@ -4,7 +4,7 @@
 
     <div class="flex flex-col md:flex-row items-center mb-6">
       <img v-if="infoAccount?.image" :src="loadImageAccount(infoAccount?.image)" alt="Profile Image"
-        class="w-24 h-24 rounded-full object-cover" />
+        class="w-24 h-24 rounded-full object-cover" @error="onImageError" />
       <img v-else :src="imageNotFound" class="w-24 h-24 rounded-full object-cover" />
 
       <div class="mt-4 md:mt-0 md:ml-4 text-center md:text-left">
@@ -134,6 +134,9 @@ export default {
     this.info();
   },
   methods: {
+    onImageError(event) {
+      event.target.src = 'https://c1.alamy.com/thumbs/tcxt95/admin-icon-vector-male-user-person-profile-avatar-with-gear-cogwheel-for-settings-and-configuration-in-flat-color-glyph-pictogram-illustration-tcxt95.jpg';
+    },
     loadImageAccount,
     async info() {
       try {
