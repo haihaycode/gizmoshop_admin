@@ -131,8 +131,8 @@
                             </th>
                         </template>
                         <template #body>
-                            <tr :class="index % 2 === 0 ? 'bg-slate-200' : ''" class="hover:bg-blue-100"
-                                v-for=" (product, index) in products" :key="product.id">
+                            <tr @click="productSelected = product" :class="index % 2 === 0 ? 'bg-slate-200' : ''"
+                                class="hover:bg-blue-100" v-for=" (product, index) in products" :key="product.id">
                                 <td class="text-center">{{ index }}_@MSP{{ product.id }}</td>
                                 <td class="text-center">{{ product.productName }}</td>
                                 <td class="text-center">{{ formatCurrencyVN(product.productPrice) }} / {{
@@ -176,6 +176,8 @@
 
 
         </ModalBox>
+        <ModalStatisProductComponent :isOpen="productSelected?.id ? true : false" :product="productSelected"
+            @closeModal="() => { productSelected = null }" />
     </div>
 </template>
 
@@ -192,6 +194,7 @@ import SearchByStartDateAndEndDate from '@/components/filter/searchByStartDateAn
 import notificationService from '@/services/notificationService';
 import { Line } from 'vue-chartjs';
 import { Chart as ChartJS, Title, Tooltip, Legend, LineElement, PointElement, CategoryScale, LinearScale } from 'chart.js';
+import ModalStatisProductComponent from './ModalStatisProductComponent.vue';
 
 ChartJS.register(Title, Tooltip, Legend, LineElement, PointElement, CategoryScale, LinearScale);
 
@@ -200,6 +203,7 @@ export default {
 
     data() {
         return {
+            productSelected: null,
             startDateTT: null,
             endDateTT: null,
             revenueTotalBetween: null,
@@ -228,6 +232,7 @@ export default {
         }
     },
     components: {
+        ModalStatisProductComponent,
         LineChart: Line,
         SearchByKeywordComponent,
         SearchByStartDateAndEndDate,
