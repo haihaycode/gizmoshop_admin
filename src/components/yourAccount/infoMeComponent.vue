@@ -1,6 +1,7 @@
 <template>
-  <div class="bg-white p-6 rounded-lg shadow-md">
-    <h1 class="text-2xl font-bold mb-6">Thông tin của tôi</h1>
+  <div class="bg-white bg-opacity-50 p-6 rounded-lg shadow-md">
+    <h1 class="text-xl sm:text-2xl mt-1 ml-1 font-semibold mb-2 border-l-4 border-blue-700">&nbsp; Hồ sơ
+    </h1>
 
     <div class="flex flex-col md:flex-row items-center mb-6">
       <img v-if="infoAccount?.image" :src="loadImageAccount(infoAccount?.image)" alt="Profile Image"

@@ -8,7 +8,8 @@
                     v-model="selectedMonth" @change="fetchTopSellingProducts()" />
             </div>
 
-            <h3 class="text-xl font-semibold text-gray-700 mb-4">Sản phẩm bán nhiều nhất</h3>
+            <h3 class="text-xl sm:text-2xl mt-1 ml-1 font-semibold mb-2 border-l-4 border-blue-500">&nbsp; Sản phẩm bán
+                nhiều nhất</h3>
 
             <div v-if="topSellingProducts.length > 0">
                 <table class="table-auto border-collapse border border-gray-300 w-full">
@@ -47,7 +48,8 @@
 
         <!-- Sản phẩm sắp hết hàng -->
         <div class="bg-white shadow-sm rounded-sm p-6">
-            <h3 class="text-xl font-semibold text-gray-700 mb-4">Sản phẩm sắp hết hàng</h3>
+            <h3 class="text-xl sm:text-2xl mt-1 ml-1 font-semibold mb-2 border-l-4 border-blue-500">&nbsp; Sản phẩm sắp
+                hết hàng</h3>
             <div v-if="lowStockProducts.length > 0">
                 <table class="table-auto border-collapse border border-gray-300 w-full">
                     <thead>
@@ -175,7 +177,7 @@ export default {
             topSellingChartInstance = new Chart(ctx, {
                 type: "bar",
                 data: {
-                    labels: topSellingProducts.value.map((product) => product.name),
+                    labels: topSellingProducts.value.map((product) => product.name.slice(0, 20) + '...'),
                     datasets: [
                         {
                             label: "Số lượng bán",

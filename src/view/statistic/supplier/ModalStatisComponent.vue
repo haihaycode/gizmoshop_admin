@@ -13,7 +13,9 @@
                 <div class="flex justify-between space-x-4">
                     <!-- Doanh thu tháng -->
                     <div class="flex-1 bg-white border rounded-lg p-4">
-                        <h3 class="text-lg font-semibold text-gray-800">Doanh thu tháng này</h3>
+                        <h3 class="text-xl sm:text-2xl mt-1 ml-1 font-semibold mb-2 border-l-4 border-blue-500">&nbsp;
+                            Doanh
+                            thu tháng này</h3>
                         <p class="text-sm font-medium text-gray-600" v-if="isLoadingRevenueTotalMonth"><i
                                 class="bx bx-loader bx-spin"></i> Đang phân tích ...</p>
                         <p class="text-xl font-bold text-gray-600" v-else>{{ formatCurrencyVN(revenueTotalMonth) }}</p>
@@ -21,16 +23,20 @@
 
                     <!-- Doanh thu tuần -->
                     <div class="flex-1 bg-white border rounded-lg p-4">
-                        <h3 class="text-lg font-semibold text-gray-800">Doanh thu tuần này</h3>
+                        <h3 class="text-xl sm:text-2xl mt-1 ml-1 font-semibold mb-2 border-l-4 border-blue-500">&nbsp;
+                            Doanh
+                            thu tuần này</h3>
                         <p class="text-sm font-medium text-gray-600" v-if="isLoadingRevenueTotalWeek"><i
                                 class="bx bx-loader bx-spin"></i> Đang phân tích ...</p>
                         <p class="text-xl font-bold text-gray-600" v-else>{{ formatCurrencyVN(revenueTotalWeek) }}</p>
                     </div>
                 </div>
 
-                <div class="p-2 border rounded-md mt-2">
+                <div class="p-2  rounded-md mt-2">
                     <div class="flex justify-between items-center space-x-4 mt-2">
-                        <h3 class="text-lg font-semibold text-gray-800"> - Doanh thu theo khoảng thời gian</h3>
+                        <h3 class="text-xl sm:text-2xl mt-1 ml-1 font-semibold mb-2 border-l-4 border-blue-500">&nbsp;
+                            Doanh
+                            thu theo khoảng thời gian</h3>
                         <div class="flex space-x-4">
                             <input type="date" v-model="startDateTT"
                                 class="px-4 py-2 border border-gray-300 rounded-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
@@ -59,8 +65,8 @@
                 <div class="p-2 mt-2">
                     <div>
                         <h3 class="sm:text-sm md:text-xl mb-2 flex items-center justify-between">
-                            <div class="text-lg font-semibold text-gray-800">
-                                - Sản phẩm đang giao dịch và đã cung cấp
+                            <div class="text-xl sm:text-xl mt-1 ml-1 font-semibold mb-2 border-l-4 border-blue-500">
+                                &nbsp; Sản phẩm đang giao dịch và đã cung cấp
                             </div>
                             <SearchByStartDateAndEndDate
                                 @search="(startDate, endDate) => { filter.startDate = startDate; filter.endDate = endDate; handleFetchAllProductByAccountID() }" />
@@ -147,7 +153,7 @@
                                 <td class="text-center">{{ product.productBrand.name }}</td>
                                 <td class="text-center"> còn {{ product.productInventoryResponse.quantity }} (kho) {{
                                     product.productInventoryResponse.inventory.inventoryName
-                                }}</td>
+                                    }}</td>
 
                                 <td class="text-center">{{ product.productStatusResponse.name }}</td>
 
