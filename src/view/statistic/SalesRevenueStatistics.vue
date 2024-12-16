@@ -3,7 +3,8 @@
 
         <div class="p-2 border rounded-md mt-2">
             <div class="flex justify-between items-center space-x-4 mt-2">
-                <h3 class="text-lg font-semibold text-gray-800"> - Doanh thu theo khoảng thời gian</h3>
+                <h3 class="text-xl sm:text-2xl mt-1 ml-1 font-semibold mb-2 border-l-4 border-blue-500">&nbsp; Doanh thu
+                    theo khoảng thời gian</h3>
                 <div class="flex space-x-4">
                     <input type="date" v-model="startDateTT"
                         class="px-4 py-2 border border-gray-300 rounded-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />

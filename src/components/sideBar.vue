@@ -46,27 +46,42 @@
                 </li>
                 <span class="text-white font-bold">THỐNG KÊ</span>
                 <li class="mb-1 group">
-                    <router-link :to="{ name: 'SalesRevenueStatistics' }"
-                        class="flex font-semibold items-center py-2 px-4 text-white hover:bg-gray-100 hover:bg-opacity-5 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100">
-                        <i class='bx bx-coin-stack mr-3 text-lg'></i>
+                    <a href="/statistic/Sales-Revenue-Statistics"
+                        class="flex font-semibold items-center py-2 px-4 text-white hover:bg-gray-100 hover:bg-opacity-5 hover:text-gray-100 rounded-md"
+                        :class="{
+                            '':
+                                $route.name === 'SalesRevenueStatistics', 'bg-gray-100 bg-opacity-5 text-gray-100 rounded-md':
+                                $route.name === 'SalesRevenueStatistics'
+                        }">
+                        <i class="bx bx-coin-stack mr-3 text-lg"></i>
                         <span class="text-sm">Doanh thu bán hàng</span>
-                    </router-link>
+                    </a>
                 </li>
                 <li class="mb-1 group">
-                    <router-link :to="{ name: 'ProductStatistics' }"
-                        class="flex font-semibold items-center py-2 px-4 text-white hover:bg-gray-100 hover:bg-opacity-5 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100">
-                        <i class='bx bxl-deezer mr-3 text-lg'></i>
-                        <span class="text-sm">Thống kê Sản phẩm </span>
-                    </router-link>
+                    <a href="/statistic/Product-Statistics"
+                        class="flex font-semibold items-center py-2 px-4 text-white hover:bg-gray-100 hover:bg-opacity-5 hover:text-gray-100 rounded-md"
+                        :class="{
+                            '':
+                                $route.name === 'ProductStatistics', 'bg-gray-100 bg-opacity-5 text-gray-100 rounded-md':
+                                $route.name === 'ProductStatistics'
+                        }">
+                        <i class="bx bxl-deezer mr-3 text-lg"></i>
+                        <span class="text-sm">Thống kê Sản phẩm</span>
+                    </a>
                 </li>
                 <li class="mb-1 group">
-                    <router-link :to="{ name: 'SupplierStatistics' }" class=" flex font-semibold items-center py-2 px-4 text-white hover:bg-gray-100
-                        hover:bg-opacity-5 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800
-                        group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100">
-                        <i class='bx bx-envelope mr-3 text-lg'></i>
-                        <span class="text-sm">Nhà cung cấp </span>
-                    </router-link>
+                    <a href="/statistic/Supplier-Statistics"
+                        class="flex font-semibold items-center py-2 px-4 text-white hover:bg-gray-100 hover:bg-opacity-5 hover:text-gray-100 rounded-md"
+                        :class="{
+                            '':
+                                $route.name === 'SupplierStatistics', 'bg-gray-100 bg-opacity-5 text-gray-100 rounded-md':
+                                $route.name === 'SupplierStatistics'
+                        }">
+                        <i class="bx bx-envelope mr-3 text-lg"></i>
+                        <span class="text-sm">Nhà cung cấp</span>
+                    </a>
                 </li>
+
                 <span @click="logout" class="text-white font-bold cursor-pointer">
                     <i class='bx bx-log-out'></i> &nbsp; Đăng Xuất</span>
             </ul>
