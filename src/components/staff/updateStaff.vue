@@ -88,8 +88,16 @@ export default {
         Button,
         NotificationModal
     },
-    mounted() {
-        this.useData(this.accountId)
+    // mounted() {
+    //     this.useData(this.accountId)
+    // },
+    watch: {
+        accountId: {
+            immediate: true,
+            handler(newId) {
+                this.useData(newId);
+            }
+        },
     },
     methods: {
         closeModal() {
